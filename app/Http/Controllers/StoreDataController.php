@@ -100,7 +100,7 @@ class StoreDataController extends BaseController
             return false;
         }
 
-        DB::table('license')->where('license', $this->request->input('license'))->delete();
+        DB::table('subscription')->where('license', $this->request->input('license'))->delete();
 
         return true;
     }
