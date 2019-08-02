@@ -66,6 +66,9 @@ class LicenseController extends BaseController
                     return $error;
                 }
 
+                // Remove saved response.
+                DB::table('license')->where('license', trim($this->request->input('license')))->delete();
+
                 $response = $this->getResultFromGiveWP();
                 break;
 
@@ -252,8 +255,7 @@ class LicenseController extends BaseController
     {
         $response       = array();
         $licenses       = array_map('trim', explode(',', $this->request->input('licenses')));
-        $licensesFromDB = DB::table('license')->whereIn('license', $licenses)->select('license',
-            'data')->get()->toArray();
+        $licensesFromDB = DB::table('license')->whereIn('license', $licenses)->select('license', 'data' )->get()->toArray();
 
         /*
          * A result set will be count as successful on if:
@@ -377,3 +379,4 @@ class LicenseController extends BaseController
 // @todo: check if license expired or not before sending license result.
 // @todo: discuss with jason how to handle requests other then registered routes
 // @todo: discuss with jason about refactoring code
+// @todo update created and update date only if necessary
