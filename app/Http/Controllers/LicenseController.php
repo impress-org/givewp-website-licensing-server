@@ -179,63 +179,74 @@ class LicenseController extends BaseController
 
         switch ($type) {
             case 'get_version':
-                DB::table('addon')->updateOrInsert(
-                    array('addon' => $dataFromGiveWP['name']),
+                $where  = array('addon' => $dataFromGiveWP['name']);
+                $values = $this->filter_data(
+                    'addon',
+                    $where,
                     array(
-                        'data'       => serialize($dataFromGiveWP),
-                        'created_at' => date('Y:m:d H:i:s'),
-                        'updated_at' => date('Y:m:d H:i:s'),
+                        'data' => serialize($dataFromGiveWP),
                     )
                 );
+
+                DB::table('addon')->updateOrInsert($where, $values);
 
                 break;
 
             case 'check_subscription':
-                DB::table('subscription')->updateOrInsert(
-                    array('license' => $dataFromGiveWP['license_key']),
+                $where  = array('subscription' => $dataFromGiveWP['name']);
+                $values = $this->filter_data(
+                    'subscription',
+                    $where,
                     array(
-                        'data'       => serialize($dataFromGiveWP),
-                        'created_at' => date('Y:m:d H:i:s'),
-                        'updated_at' => date('Y:m:d H:i:s'),
+                        'data' => serialize($dataFromGiveWP),
                     )
                 );
+
+                DB::table('subscription')->updateOrInsert($where, $values);
 
                 break;
             case 'check_license':
             case 'check_licenses':
+                $table = 'license';
+
                 foreach ($dataFromGiveWP as $license_key => $data) {
                     if ( ! empty($data['check_license'])) {
-                        DB::table('license')->updateOrInsert(
-                            array('license' => $license_key),
+                        $where  = array('license' => $license_key);
+                        $values = $this->filter_data(
+                            $table,
+                            $where,
                             array(
-                                'data'       => serialize($data),
-                                'created_at' => date('Y:m:d H:i:s'),
-                                'updated_at' => date('Y:m:d H:i:s'),
+                                'data' => serialize($data),
                             )
                         );
+
+                        DB::table($table)->updateOrInsert($where, $values);
                     }
 
                     if ( ! empty($data['get_version'])) {
-                        DB::table('addon')->updateOrInsert(
-                            array('addon' => $data['get_version']['name']),
+                        $where  = array('addon' => $data['get_version']['name']);
+                        $values = $this->filter_data(
+                            'addon',
+                            $where,
                             array(
-                                'data'       => serialize($data['get_version']),
-                                'created_at' => date('Y:m:d H:i:s'),
-                                'updated_at' => date('Y:m:d H:i:s'),
+                                'data' => serialize($data['get_version']),
                             )
                         );
 
+                        DB::table('addon')->updateOrInsert($where, $values);
+
                     } elseif ( ! empty($data['get_versions'])) {
                         foreach ($data['get_versions'] as $addon) {
-                            DB::table('addon')->updateOrInsert(
-                                array('addon' => $addon['name']),
+                            $where  = array('addon' => $addon['name']);
+                            $values = $this->filter_data(
+                                'addon',
+                                $where,
                                 array(
-                                    'data'       => serialize($addon),
-                                    'created_at' => date('Y:m:d H:i:s'),
-                                    'updated_at' => date('Y:m:d H:i:s'),
+                                    'data' => serialize($addon),
                                 )
                             );
 
+                            DB::table('addon')->updateOrInsert($where, $values);
                         }
                     }
                 }
@@ -255,7 +266,8 @@ class LicenseController extends BaseController
     {
         $response       = array();
         $licenses       = array_map('trim', explode(',', $this->request->input('licenses')));
-        $licensesFromDB = DB::table('license')->whereIn('license', $licenses)->select('license', 'data' )->get()->toArray();
+        $licensesFromDB = DB::table('license')->whereIn('license', $licenses)->select('license',
+            'data')->get()->toArray();
 
         /*
          * A result set will be count as successful on if:
@@ -372,6 +384,26 @@ class LicenseController extends BaseController
         }
 
         return $response;
+    }
+
+    /**
+     * Filter data
+     *
+     * @param $table
+     * @param $attributes
+     * @param $values
+     *
+     * @return array
+     */
+    private function filter_data($table, $attributes, $values)
+    {
+        $values['updated_at'] = date('Y:m:d H:i:s');
+
+        if ( ! DB::table($table)->where($attributes)->exists()) {
+            $values['created_at'] = $values['updated_at'];
+        }
+
+        return $values;
     }
 }
 
