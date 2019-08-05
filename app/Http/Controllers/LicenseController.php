@@ -50,7 +50,7 @@ class LicenseController extends BaseController
     public function handle()
     {
         $error = \response()->json(array(
-            'msg' => 'This is ot a valid query.',
+            'msg' => 'This is not a valid query.',
         ), 400);
 
         if ( ! $this->request->filled('edd_action')) {
