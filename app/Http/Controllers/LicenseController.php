@@ -411,4 +411,3 @@ class LicenseController extends BaseController
 // @todo: check if license expired or not before sending license result.
 // @todo: discuss with jason how to handle requests other then registered routes
 // @todo: discuss with jason about refactoring code
-// @todo update created and update date only if necessary
