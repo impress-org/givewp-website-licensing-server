@@ -117,11 +117,10 @@ jobs:
           paths:
             - ./vendor
 
-      - run: mv -f .circleci/.env ./
+      - run: mv -f .circleci/.env.testing ./
 
       # prepare the database
       - run: mysqladmin create test --host="127.0.0.1" --user="root" --password="root"
-      - run: php artisan migrate --env=testing --force
 
       # run tests
       - run: ./vendor/bin/phpunit
