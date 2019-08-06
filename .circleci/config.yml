@@ -117,7 +117,7 @@ jobs:
           paths:
             - ./vendor
 
-      - run: mv -f .circleci/.env.testing ./
+      - run: mv -f .circleci/.env ./
 
       # prepare the database
       - run: mysqladmin create test --host="127.0.0.1" --user="root" --password="root"
@@ -172,7 +172,7 @@ jobs:
 
 workflows:
   version: 2
-  build-deploy:
+  build-deploy-give-proxy:
     jobs:
       - checkout-code
       - build:
