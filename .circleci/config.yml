@@ -1,0 +1,206 @@
+orbs:
+  gcp-cli: circleci/gcp-cli@1.3.0
+
+version: 2.1
+
+reference:
+  restore_repo: &restore_repo
+    restore_cache:
+      keys:
+        - v1-repo-{{ .Branch }}-{{ .Revision }}
+        - v1-repo-{{ .Branch }}
+        - v1-repo
+
+  restore_vendors: &restore_vendors
+    restore_cache:
+      keys:
+        - v1-dependencies-{{ checksum "composer.lock" }}
+        - v1-dependencies-
+
+executors:
+  main-executor:
+    docker:
+      - image: circleci/php:7.2-stretch-node-browsers
+      - image: circleci/mysql:5.7-ram
+        environment:
+          - MYSQL_ROOT_PASSWORD=root
+
+commands:
+  compile-app-engine-configurations:
+    description: "Compiles the configuration files for App Engine deployment"
+    parameters:
+      environment:
+        type: string
+      debug:
+        type: boolean
+      app-url:
+        type: string
+      app-base-url:
+        type: string
+      app-key:
+        type: env_var_name
+      gcp-project-id:
+        type: env_var_name
+      db-username:
+        type: env_var_name
+      db-password:
+        type: env_var_name
+      db-connection-name:
+        type: env_var_name
+    steps:
+      - run:
+          name:    Set up App Engine config
+          command: >-
+                   php .circleci/set-environment-var.php app.yaml
+                   APP_ENV,<< parameters.environment >>
+                   APP_URL,<< parameters.app-url >>
+                   APP_DEBUG,<< parameters.debug >>
+                   APP_KEY,${<< parameters.app-key >>}
+                   GCP_PROJECT_ID,${<< parameters.gcp-project-id >>}
+                   GCP_STORAGE_BUCKET,${<< parameters.gcp-storage-bucket >>}
+                   DB_USERNAME,${<< parameters.db-username >>}
+                   DB_PASSWORD,${<< parameters.db-password >>}
+                   DB_CONNECTION_NAME,${<< parameters.db-connection-name >>}
+
+  setup-and-deploy-app-engine:
+    description: "Installs and initializes gcloud, then deploys"
+    parameters:
+      gcloud-service-key:
+        type: env_var_name
+      google-compute-zone:
+        type: env_var_name
+      google-project-id:
+        type: env_var_name
+      no-promote:
+        type:    boolean
+        default: false
+    steps:
+      - gcp-cli/install
+      - gcp-cli/initialize:
+          gcloud-service-key:  << parameters.gcloud-service-key >>
+          google-compute-zone: << parameters.google-compute-zone >>
+          google-project-id:   << parameters.google-project-id >>
+      - run: gcloud app deploy --quiet -v "v$(php artisan app:version --plain | sed 's/\./-/g')" <<# parameters.no-promote >> --no-promote <</ parameters.no-promote >>
+
+jobs:
+  checkout-code:
+    executor: main-executor
+
+    steps:
+      - *restore_repo
+      - checkout
+      - save_cache:
+          key: v1-repo-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - .
+
+  build:
+    executor: main-executor
+
+    steps:
+      - *restore_repo
+
+      - run:
+          name:    Set up container
+          command: |
+                   sudo apt update
+                   sudo docker-php-ext-configure pdo_mysql --with-pdo-mysql=mysqlnd
+                   sudo docker-php-ext-install zip bcmath pdo_mysql
+                   sudo apt-get install mysql-client
+
+      # Download and cache dependencies
+      - *restore_vendors
+
+      - run:
+          name:    Install composer packages
+          command: composer install -n --prefer-dist
+
+      - save_cache:
+          key: v1-dependencies-{{ checksum "composer.lock" }}
+          paths:
+            - ./vendor
+
+      - run: mv -f .circleci/.env.testing ./
+
+      # prepare the database
+      - run: mysqladmin create test --host="127.0.0.1" --user="root" --password="root"
+      - run: php artisan migrate --env=testing --force
+
+      # run tests
+      - run: ./vendor/bin/phpunit
+
+  deploy-staging:
+    executor: main-executor
+
+    steps:
+      - *restore_repo
+      - *restore_vendors
+
+      - compile-app-engine-configurations:
+          environment:        staging
+          debug:              true
+          app-url:            https://staging.licensing.givewp.com
+          app-key:            STAGING_APP_KEY
+          gcp-project-id:     STAGING_GCP_PROJECT_ID
+          db-username:        STAGING_DB_USERNAME
+          db-password:        STAGING_DB_PASSWORD
+          db-connection-name: STAGING_DB_CONNECTION_NAME
+
+      - setup-and-deploy-app-engine:
+          gcloud-service-key:  STAGING_GCP_SERVICE_KEY
+          google-compute-zone: STAGING_GCP_COMPUTE_ZONE
+          google-project-id:   STAGING_GCP_PROJECT_ID
+
+  deploy-production:
+    executor: main-executor
+
+    steps:
+      - *restore_repo
+      - *restore_vendors
+
+      - compile-app-engine-configurations:
+          environment:        production
+          debug:              false
+          app-url:            https://licensing.givewp.com
+          app-key:            PROD_APP_KEY
+          gcp-project-id:     PROD_GCP_PROJECT_ID
+          db-username:        PROD_DB_USERNAME
+          db-password:        PROD_DB_PASSWORD
+          db-connection-name: PROD_DB_CONNECTION_NAME
+
+      - setup-and-deploy-app-engine:
+          gcloud-service-key:  PROD_GCP_SERVICE_KEY
+          google-compute-zone: PROD_GCP_COMPUTE_ZONE
+          google-project-id:   PROD_GCP_PROJECT_ID
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - checkout-code
+      - build:
+          requires:
+            - checkout-code
+
+      - deploy-staging:
+          requires:
+            - build
+          filters:
+            branches:
+              only: staging
+
+      - hold:
+          type: approval
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+
+      - deploy-production:
+          requires:
+            - build
+            - hold
+          filters:
+            branches:
+              only: master
