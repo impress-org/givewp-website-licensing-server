@@ -2,8 +2,11 @@
 
 require_once __DIR__.'/../vendor/autoload.php';
 
+$envFile = isset($_ENV['APP_ENV']) ? ".env.{$_ENV['APP_ENV']}" : '.env';
+
 (new Laravel\Lumen\Bootstrap\LoadEnvironmentVariables(
-    dirname(__DIR__)
+    dirname(__DIR__),
+    $envFile
 ))->bootstrap();
 
 /*
