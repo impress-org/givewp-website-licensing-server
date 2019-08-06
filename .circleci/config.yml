@@ -35,8 +35,6 @@ commands:
         type: boolean
       app-url:
         type: string
-      app-base-url:
-        type: string
       app-key:
         type: env_var_name
       gcp-project-id:
