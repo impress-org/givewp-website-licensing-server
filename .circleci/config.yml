@@ -55,7 +55,6 @@ commands:
                    APP_DEBUG,<< parameters.debug >>
                    APP_KEY,${<< parameters.app-key >>}
                    GCP_PROJECT_ID,${<< parameters.gcp-project-id >>}
-                   GCP_STORAGE_BUCKET,${<< parameters.gcp-storage-bucket >>}
                    DB_USERNAME,${<< parameters.db-username >>}
                    DB_PASSWORD,${<< parameters.db-password >>}
                    DB_CONNECTION_NAME,${<< parameters.db-connection-name >>}
