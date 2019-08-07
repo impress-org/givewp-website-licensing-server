@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateAddonTable extends Migration
+class CreateAddonsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateAddonTable extends Migration
      */
     public function up()
     {
-        Schema::create('addon', function (Blueprint $table) {
+        Schema::create('addons', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('addon', 150 )->unique();
             $table->longText('data' );
@@ -28,6 +28,6 @@ class CreateAddonTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('addon');
+        Schema::dropIfExists('addons');
     }
 }

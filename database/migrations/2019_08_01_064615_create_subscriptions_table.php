@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLicenseTable extends Migration
+class CreateSubscriptionsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,7 +13,7 @@ class CreateLicenseTable extends Migration
      */
     public function up()
     {
-        Schema::create('license', function (Blueprint $table) {
+        Schema::create('subscriptions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('license', 150 )->unique();
             $table->longText('data' );
@@ -28,6 +28,6 @@ class CreateLicenseTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('license');
+        Schema::dropIfExists('subscriptions');
     }
 }
