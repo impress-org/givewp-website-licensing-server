@@ -33,6 +33,8 @@ env_variables:
 
     GOOGLE_CLOUD_PROJECT_ID: [GCP_PROJECT_ID]
 
+    GIVEWP_LICENSE_ENDPOINT: [GIVEWP_LICENSE_ENDPOINT]
+
 beta_settings:
     cloud_sql_instances: [DB_CONNECTION_NAME]
 

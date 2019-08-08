@@ -45,6 +45,8 @@ commands:
         type: env_var_name
       db-connection-name:
         type: env_var_name
+      givewp-license-endpoint:
+        type: string
     steps:
       - run:
           name:    Set up App Engine config
@@ -58,6 +60,7 @@ commands:
                    DB_USERNAME,${<< parameters.db-username >>}
                    DB_PASSWORD,${<< parameters.db-password >>}
                    DB_CONNECTION_NAME,${<< parameters.db-connection-name >>}
+                   GIVEWP_LICENSE_ENDPOINT,${<< parameters.givewp-license-endpoint >>}
 
   setup-and-deploy-app-engine:
     description: "Installs and initializes gcloud, then deploys"
@@ -133,14 +136,15 @@ jobs:
       - *restore_vendors
 
       - compile-app-engine-configurations:
-          environment:        staging
-          debug:              true
-          app-url:            https://staging.licensing.givewp.com
-          app-key:            STAGING_APP_KEY
-          gcp-project-id:     STAGING_GCP_PROJECT_ID
-          db-username:        STAGING_DB_USERNAME
-          db-password:        STAGING_DB_PASSWORD
-          db-connection-name: STAGING_DB_CONNECTION_NAME
+          environment:             staging
+          debug:                   true
+          app-url:                 https://staging.licensing.givewp.com
+          app-key:                 STAGING_APP_KEY
+          gcp-project-id:          STAGING_GCP_PROJECT_ID
+          db-username:             STAGING_DB_USERNAME
+          db-password:             STAGING_DB_PASSWORD
+          db-connection-name:      STAGING_DB_CONNECTION_NAME
+          givewp-license-endpoint: http://staging.givewp.com/edd-sl-api
 
       - setup-and-deploy-app-engine:
           gcloud-service-key:  STAGING_GCP_SERVICE_KEY
@@ -155,14 +159,15 @@ jobs:
       - *restore_vendors
 
       - compile-app-engine-configurations:
-          environment:        production
-          debug:              false
-          app-url:            https://licensing.givewp.com
-          app-key:            PROD_APP_KEY
-          gcp-project-id:     PROD_GCP_PROJECT_ID
-          db-username:        PROD_DB_USERNAME
-          db-password:        PROD_DB_PASSWORD
-          db-connection-name: PROD_DB_CONNECTION_NAME
+          environment:             production
+          debug:                   false
+          app-url:                 https://licensing.givewp.com
+          app-key:                 PROD_APP_KEY
+          gcp-project-id:          PROD_GCP_PROJECT_ID
+          db-username:             PROD_DB_USERNAME
+          db-password:             PROD_DB_PASSWORD
+          db-connection-name:      PROD_DB_CONNECTION_NAME
+          givewp-license-endpoint: https://givewp.com/edd-sl-api
 
       - setup-and-deploy-app-engine:
           gcloud-service-key:  PROD_GCP_SERVICE_KEY
