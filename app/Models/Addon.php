@@ -19,20 +19,22 @@ class Addon extends Model
     /**
      * Store data
      *
-     * @param $where
-     * @param  array  $attributes
+     * @param  string  $addon  Add-on name.
+     * @param  array  $data  Array of add-on information.
      *
      * @return bool
      */
-    public static function store($where, $attributes = array())
+    public static function store(string $addon, array $data)
     {
-        $addon = self::where($where)->first();
+        $addon = self::where('addon', $addon)->first();
 
         // Where not any record found in the table then $addon will set to zero which prevents insertion of the new record.
         // To prevent that we are initializing the model.
         $addon = $addon ?: new self();
 
-        $addon->fill(array_merge($where, $attributes));
+        $data['addon'] = $addon;
+
+        $addon->fill($data);
 
         return $addon->save();
     }

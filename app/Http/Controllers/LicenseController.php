@@ -183,42 +183,27 @@ class LicenseController extends BaseController
 
         switch ($type) {
             case 'get_version':
-                Addon::store(
-                    ['addon' => $dataFromGiveWP['name']],
-                    ['data' => serialize($dataFromGiveWP)]
-                );
+                Addon::store( $dataFromGiveWP['name'], ['data' => serialize($dataFromGiveWP)]);
 
                 break;
 
             case 'check_subscription':
-                Subscription::store(
-                    ['license' => $dataFromGiveWP['license_key']],
-                    ['data' => serialize($dataFromGiveWP)]
-                );
+                Subscription::store($dataFromGiveWP['license_key'], ['data' => serialize($dataFromGiveWP)]);
 
                 break;
             case 'check_license':
             case 'check_licenses':
                 foreach ($dataFromGiveWP as $license_key => $data) {
                     if ( ! empty($data['check_license'])) {
-                        License::store(
-                            ['license' => $license_key],
-                            ['data' => serialize($data)]
-                        );
+                        License::store($license_key, ['data' => serialize($data)]);
                     }
 
                     if ( ! empty($data['get_version'])) {
-                        Addon::store(
-                            ['addon' => $data['get_version']['name']],
-                            ['data' => serialize($data['get_version'])]
-                        );
+                        Addon::store($data['get_version']['name'], ['data' => serialize($data['get_version'])]);
 
                     } elseif ( ! empty($data['get_versions'])) {
                         foreach ($data['get_versions'] as $addon) {
-                            Addon::store(
-                                ['addon' => $addon['name']],
-                                ['data' => serialize($addon)]
-                            );
+                            Addon::store($addon['name'], ['data' => serialize($addon)]);
                         }
                     }
                 }

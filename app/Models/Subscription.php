@@ -18,20 +18,22 @@ class Subscription extends Model
     /**
      * Store data
      *
-     * @param $where
-     * @param  array  $attributes
+     * @param  string  $license License Key.
+     * @param  array  $data Array of subscriotion data.
      *
      * @return bool
      */
-    public static function store($where, $attributes = array())
+    public static function store(string $license, array $data )
     {
-        $subscription = self::where($where)->first();
+        $subscription = self::where('license', $license)->first();
 
         // Where not any record found in the table then $subscription will set to zero which prevents insertion of the new record.
         // To prevent that we are initializing the model.
         $subscription = $subscription ?: new self();
 
-        $subscription->fill(array_merge($where, $attributes));
+        $subscription['license'] = $license;
+
+        $subscription->fill($data);
 
         return $subscription->save();
     }
