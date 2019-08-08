@@ -49,26 +49,19 @@ class LicenseController extends BaseController
      *
      * @return string
      * @throws GuzzleException
+     * @throws \Illuminate\Validation\ValidationException
      * @since 0.1
      */
     public function handle()
     {
-        $error = \response()->json(array(
-            'msg' => 'This is not a valid query.',
-        ), 400);
-
-        if ( ! $this->request->filled('edd_action')) {
-            return $error;
-        }
+        $this->validate($this->request, ['edd_action' => 'required|string']);
 
         $response = array();
 
         switch ($this->request->input('edd_action')) {
             case 'activate_license':
             case 'deactivate_license':
-                if ( ! $this->request->filled('license', 'item_name')) {
-                    return $error;
-                }
+                $this->validate($this->request, ['license' => 'required|string', 'item_name' => 'required|string']);
 
                 // Remove saved response.
                 DB::table('license')->where('license', trim($this->request->input('license')))->delete();
@@ -77,33 +70,25 @@ class LicenseController extends BaseController
                 break;
 
             case 'check_license':
-                if ( ! $this->request->filled('license')) {
-                    return $error;
-                }
+                $this->validate($this->request, ['license' => 'required|string']);
 
                 $response = $this->handleCheckLicense();
                 break;
 
             case 'check_licenses':
-                if ( ! $this->request->filled('licenses')) {
-                    return $error;
-                }
+                $this->validate($this->request, ['licenses' => 'required|string']);
 
                 $response = $this->handleCheckLicenses();
                 break;
 
             case 'get_version':
-                if ( ! $this->request->filled('item_name')) {
-                    return $error;
-                }
+                $this->validate($this->request, ['item_name' => 'required|string']);
 
                 $response = $this->handleGetVersion();
                 break;
 
             case 'check_subscription':
-                if ( ! $this->request->filled('license', 'item_name')) {
-                    return $error;
-                }
+                $this->validate($this->request, ['license' => 'required|string', 'item_name' => 'required|string']);
 
                 $response = $this->handleCheckSubscription();
                 break;
@@ -183,30 +168,30 @@ class LicenseController extends BaseController
 
         switch ($type) {
             case 'get_version':
-                if( ! empty( $dataFromGiveWP['new_version'] ) ) {
-                    Addon::store( $dataFromGiveWP['name'], $dataFromGiveWP );
+                if ( ! empty($dataFromGiveWP['new_version'])) {
+                    Addon::store($dataFromGiveWP['name'], $dataFromGiveWP);
                 }
 
                 break;
 
             case 'check_subscription':
-                if( ! empty( $dataFromGiveWP['subscription_key'] ) ) {
-                    Subscription::store($dataFromGiveWP['license_key'], $dataFromGiveWP );
+                if ( ! empty($dataFromGiveWP['subscription_key'])) {
+                    Subscription::store($dataFromGiveWP['license_key'], $dataFromGiveWP);
                 }
 
                 break;
             case 'check_license':
             case 'check_licenses':
                 foreach ($dataFromGiveWP as $license_key => $data) {
-                    if ( ! empty( $data['check_license'] ) && ! empty( $data['check_license']['license_key'] ) ) {
-                        License::store($license_key, $data );
+                    if ( ! empty($data['check_license']) && ! empty($data['check_license']['license_key'])) {
+                        License::store($license_key, $data);
                     }
 
-                    if ( ! empty($data['get_version']) && ! empty( $data['get_version']['new_version'] ) ) {
+                    if ( ! empty($data['get_version']) && ! empty($data['get_version']['new_version'])) {
                         Addon::store($data['get_version']['name'], $data['get_version']);
                     } elseif ( ! empty($data['get_versions'])) {
                         foreach ($data['get_versions'] as $addon) {
-                            if( ! empty( $addon['newer_version'] ) ) {
+                            if ( ! empty($addon['newer_version'])) {
                                 Addon::store($addon['name'], $addon);
                             }
                         }
