@@ -2,14 +2,17 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Addon;
+use App\Models\License;
+use App\Models\Subscription;
 use GuzzleHttp\Exception\GuzzleException;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 use GuzzleHttp\Client as Client;
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
-
 
 /**
  * Class LicenseController
@@ -21,7 +24,7 @@ use Monolog\Handler\StreamHandler;
  */
 class LicenseController extends BaseController
 {
-    private $api_url = 'http://staging.givewp.com/edd-sl-api';
+    private $api_url = 'http://givewp.test/edd-sl-api';
     private $logger;
     private $request;
 
@@ -179,74 +182,42 @@ class LicenseController extends BaseController
 
         switch ($type) {
             case 'get_version':
-                $where  = array('addon' => $dataFromGiveWP['name']);
-                $values = $this->filter_data(
-                    'addon',
-                    $where,
-                    array(
-                        'data' => serialize($dataFromGiveWP),
-                    )
+                Addon::store(
+                    ['addon' => $dataFromGiveWP['name']],
+                    ['data' => serialize($dataFromGiveWP)]
                 );
-
-                DB::table('addon')->updateOrInsert($where, $values);
 
                 break;
 
             case 'check_subscription':
-                $where  = array('subscription' => $dataFromGiveWP['name']);
-                $values = $this->filter_data(
-                    'subscription',
-                    $where,
-                    array(
-                        'data' => serialize($dataFromGiveWP),
-                    )
+                Subscription::store(
+                    ['license' => $dataFromGiveWP['license_key']],
+                    ['data' => serialize($dataFromGiveWP)]
                 );
-
-                DB::table('subscription')->updateOrInsert($where, $values);
 
                 break;
             case 'check_license':
             case 'check_licenses':
-                $table = 'license';
-
                 foreach ($dataFromGiveWP as $license_key => $data) {
                     if ( ! empty($data['check_license'])) {
-                        $where  = array('license' => $license_key);
-                        $values = $this->filter_data(
-                            $table,
-                            $where,
-                            array(
-                                'data' => serialize($data),
-                            )
+                        License::store(
+                            ['license' => $license_key],
+                            ['data' => serialize($data)]
                         );
-
-                        DB::table($table)->updateOrInsert($where, $values);
                     }
 
                     if ( ! empty($data['get_version'])) {
-                        $where  = array('addon' => $data['get_version']['name']);
-                        $values = $this->filter_data(
-                            'addon',
-                            $where,
-                            array(
-                                'data' => serialize($data['get_version']),
-                            )
+                        Addon::store(
+                            ['addon' => $data['get_version']['name']],
+                            ['data' => serialize($data['get_version'])]
                         );
-
-                        DB::table('addon')->updateOrInsert($where, $values);
 
                     } elseif ( ! empty($data['get_versions'])) {
                         foreach ($data['get_versions'] as $addon) {
-                            $where  = array('addon' => $addon['name']);
-                            $values = $this->filter_data(
-                                'addon',
-                                $where,
-                                array(
-                                    'data' => serialize($addon),
-                                )
+                            Addon::store(
+                                ['addon' => $addon['name']],
+                                ['data' => serialize($addon)]
                             );
-
-                            DB::table('addon')->updateOrInsert($where, $values);
                         }
                     }
                 }
@@ -266,8 +237,8 @@ class LicenseController extends BaseController
     {
         $response       = array();
         $licenses       = array_map('trim', explode(',', $this->request->input('licenses')));
-        $licensesFromDB = DB::table('license')->whereIn('license', $licenses)->select('license',
-            'data')->get()->toArray();
+        $licensesFromDB = License::whereIn('license', $licenses)->select('license', 'data')->get();
+
 
         /*
          * A result set will be count as successful on if:
@@ -275,7 +246,8 @@ class LicenseController extends BaseController
          *  2. license count is same
          */
         if (
-            ! empty($licensesFromDB)
+            $licensesFromDB instanceOf Collection
+            && $licensesFromDB->isNotEmpty()
             && count($licensesFromDB) === count($licenses)
         ) {
             foreach ($licensesFromDB as $license) {
@@ -301,16 +273,15 @@ class LicenseController extends BaseController
     {
         $response       = array();
         $license        = trim($this->request->input('license'));
-        $licensesFromDB = DB::table('license')->where('license', $license)->select('license', 'data')->get()->toArray();
+        $licensesFromDB = License::where('license', $license)->select('license', 'data')->first();
 
         /*
          * A result set will be count as successful on if:
          *  1. result from database is not empty
          */
-        if ( ! empty($licensesFromDB)) {
-            foreach ($licensesFromDB as $license) {
-                $response[$license->license] = unserialize($license->data);
-            }
+        if ($licensesFromDB instanceof License) {
+            $response = unserialize($licensesFromDB->data);
+            $response = $response['check_license'];
         } else {
             try {
                 $response = $this->getResultFromGiveWP();
@@ -333,16 +304,9 @@ class LicenseController extends BaseController
         $response   = array();
         $addon_name = strtoupper(trim($this->request->input('item_name')));
 
-        try {
-            $addonFromDB = DB::table('addon')->whereRaw("UPPER(addon) LIKE '%{$addon_name}%'")->select('addon',
-                'data')->get()->first();
-        } catch (\Exception $e) {
-            $this->logger->error($e->getMessage());
+        $addonFromDB = Addon::whereRaw("UPPER(addon) LIKE '%{$addon_name}%'")->select('addon', 'data')->first();
 
-            return $response;
-        }
-
-        if ( ! empty($addonFromDB)) {
+        if ($addonFromDB instanceof Addon) {
             $response = unserialize($addonFromDB->data);
         } else {
             try {
@@ -362,17 +326,16 @@ class LicenseController extends BaseController
      */
     private function handleCheckSubscription()
     {
-        $response       = array();
-        $license        = trim($this->request->input('license'));
-        $licensesFromDB = DB::table('subscription')->where('license', $license)->select('license',
-            'data')->get()->toArray();
+        $response           = array();
+        $license            = trim($this->request->input('license'));
+        $subscriptionFromDB = Subscription::where('license', $license)->select('license', 'data')->get();
 
         /*
          * A result set will be count as successful on if:
          *  1. result from database is not empty
          */
-        if ( ! empty($licensesFromDB)) {
-            foreach ($licensesFromDB as $license) {
+        if ($subscriptionFromDB instanceof Collection && $subscriptionFromDB->isNotEmpty()) {
+            foreach ($subscriptionFromDB as $license) {
                 $response[$license->license] = unserialize($license->data);
             }
         } else {
@@ -384,26 +347,6 @@ class LicenseController extends BaseController
         }
 
         return $response;
-    }
-
-    /**
-     * Filter data
-     *
-     * @param $table
-     * @param $attributes
-     * @param $values
-     *
-     * @return array
-     */
-    private function filter_data($table, $attributes, $values)
-    {
-        $values['updated_at'] = date('Y:m:d H:i:s');
-
-        if ( ! DB::table($table)->where($attributes)->exists()) {
-            $values['created_at'] = $values['updated_at'];
-        }
-
-        return $values;
     }
 }
 
