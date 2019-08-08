@@ -19,22 +19,23 @@ class License extends Model
     /**
      * Store data
      *
-     * @param  string  $license License Key.
-     * @param  array  $data     Array of add-on information.
+     * @param  string  $license_key  License Key.
+     * @param  array  $data  Array of add-on information.
      *
      * @return bool
      */
-    public static function store( string $license, array $data)
+    public static function store(string $license_key, array $data)
     {
-        $license = self::where( 'license', $license )->first();
+        $license = self::where('license', $license_key)->first();
 
         // Where not any record found in the table then $license will set to zero which prevents insertion of the new record.
         // To prevent that we are initializing the model.
         $license = $license ?: new self();
 
-        $data['license'] = $license;
-
-        $license->fill($data);
+        $license->fill([
+            'data'    => serialize($data),
+            'license' => $license_key,
+        ]);
 
         return $license->save();
     }

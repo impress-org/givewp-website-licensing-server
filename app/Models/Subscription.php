@@ -18,12 +18,12 @@ class Subscription extends Model
     /**
      * Store data
      *
-     * @param  string  $license License Key.
-     * @param  array  $data Array of subscriotion data.
+     * @param  string  $license  License Key.
+     * @param  array  $data  Array of subscription data.
      *
      * @return bool
      */
-    public static function store(string $license, array $data )
+    public static function store(string $license, array $data)
     {
         $subscription = self::where('license', $license)->first();
 
@@ -31,9 +31,10 @@ class Subscription extends Model
         // To prevent that we are initializing the model.
         $subscription = $subscription ?: new self();
 
-        $subscription['license'] = $license;
-
-        $subscription->fill($data);
+        $subscription->fill([
+            'data'    => serialize($data),
+            'license' => $license,
+        ]);
 
         return $subscription->save();
     }
