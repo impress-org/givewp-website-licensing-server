@@ -183,27 +183,32 @@ class LicenseController extends BaseController
 
         switch ($type) {
             case 'get_version':
-                Addon::store( $dataFromGiveWP['name'], ['data' => serialize($dataFromGiveWP)]);
+                if( ! empty( $dataFromGiveWP['new_version'] ) ) {
+                    Addon::store( $dataFromGiveWP['name'], $dataFromGiveWP );
+                }
 
                 break;
 
             case 'check_subscription':
-                Subscription::store($dataFromGiveWP['license_key'], ['data' => serialize($dataFromGiveWP)]);
+                if( ! empty( $dataFromGiveWP['subscription_key'] ) ) {
+                    Subscription::store($dataFromGiveWP['license_key'], $dataFromGiveWP );
+                }
 
                 break;
             case 'check_license':
             case 'check_licenses':
                 foreach ($dataFromGiveWP as $license_key => $data) {
-                    if ( ! empty($data['check_license'])) {
-                        License::store($license_key, ['data' => serialize($data)]);
+                    if ( ! empty( $data['check_license'] ) && ! empty( $data['check_license']['license_key'] ) ) {
+                        License::store($license_key, $data );
                     }
 
-                    if ( ! empty($data['get_version'])) {
-                        Addon::store($data['get_version']['name'], ['data' => serialize($data['get_version'])]);
-
+                    if ( ! empty($data['get_version']) && ! empty( $data['get_version']['new_version'] ) ) {
+                        Addon::store($data['get_version']['name'], $data['get_version']);
                     } elseif ( ! empty($data['get_versions'])) {
                         foreach ($data['get_versions'] as $addon) {
-                            Addon::store($addon['name'], ['data' => serialize($addon)]);
+                            if( ! empty( $addon['newer_version'] ) ) {
+                                Addon::store($addon['name'], $addon);
+                            }
                         }
                     }
                 }
