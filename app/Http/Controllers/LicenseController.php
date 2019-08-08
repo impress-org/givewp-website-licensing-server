@@ -188,7 +188,7 @@ class LicenseController extends BaseController
                     )
                 );
 
-                DB::table('addon')->updateOrInsert($where, $values);
+                DB::table('addons')->updateOrInsert($where, $values);
 
                 break;
 
@@ -202,12 +202,12 @@ class LicenseController extends BaseController
                     )
                 );
 
-                DB::table('subscription')->updateOrInsert($where, $values);
+                DB::table('subscriptions')->updateOrInsert($where, $values);
 
                 break;
             case 'check_license':
             case 'check_licenses':
-                $table = 'license';
+                $table = 'licenses';
 
                 foreach ($dataFromGiveWP as $license_key => $data) {
                     if ( ! empty($data['check_license'])) {
@@ -233,7 +233,7 @@ class LicenseController extends BaseController
                             )
                         );
 
-                        DB::table('addon')->updateOrInsert($where, $values);
+                        DB::table('addons')->updateOrInsert($where, $values);
 
                     } elseif ( ! empty($data['get_versions'])) {
                         foreach ($data['get_versions'] as $addon) {
@@ -246,7 +246,7 @@ class LicenseController extends BaseController
                                 )
                             );
 
-                            DB::table('addon')->updateOrInsert($where, $values);
+                            DB::table('addons')->updateOrInsert($where, $values);
                         }
                     }
                 }
@@ -334,7 +334,7 @@ class LicenseController extends BaseController
         $addon_name = strtoupper(trim($this->request->input('item_name')));
 
         try {
-            $addonFromDB = DB::table('addon')->whereRaw("UPPER(addon) LIKE '%{$addon_name}%'")->select('addon',
+            $addonFromDB = DB::table('addons')->whereRaw("UPPER(addon) LIKE '%{$addon_name}%'")->select('addon',
                 'data')->get()->first();
         } catch (\Exception $e) {
             $this->logger->error($e->getMessage());
@@ -364,7 +364,7 @@ class LicenseController extends BaseController
     {
         $response       = array();
         $license        = trim($this->request->input('license'));
-        $licensesFromDB = DB::table('subscription')->where('license', $license)->select('license',
+        $licensesFromDB = DB::table('subscriptions')->where('license', $license)->select('license',
             'data')->get()->toArray();
 
         /*
