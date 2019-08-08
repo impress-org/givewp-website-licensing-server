@@ -14,7 +14,19 @@ use Illuminate\Database\Query\Builder;
  */
 class Addon extends Model
 {
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = ['data', 'addon'];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = ['data' => 'array'];
 
     /**
      * Store data
@@ -33,7 +45,7 @@ class Addon extends Model
         $addon = $addon ?: new self();
 
         $addon->fill([
-            'data'  => serialize($data),
+            'data'  => $data,
             'addon' => $addon_name,
         ]);
 

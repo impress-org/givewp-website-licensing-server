@@ -271,7 +271,7 @@ class LicenseController extends BaseController
          *  1. result from database is not empty
          */
         if ($licensesFromDB instanceof License) {
-            $response = unserialize($licensesFromDB->data);
+            $response = $licensesFromDB->data;
             $response = $response['check_license'];
         } else {
             try {
@@ -298,7 +298,7 @@ class LicenseController extends BaseController
         $addonFromDB = Addon::whereRaw("UPPER(addon) LIKE '%{$addon_name}%'")->select('addon', 'data')->first();
 
         if ($addonFromDB instanceof Addon) {
-            $response = unserialize($addonFromDB->data);
+            $response = $addonFromDB->data;
         } else {
             try {
                 $response = $this->getResultFromGiveWP();

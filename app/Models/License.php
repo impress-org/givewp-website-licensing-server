@@ -14,7 +14,19 @@ use Illuminate\Database\Query\Builder;
  */
 class License extends Model
 {
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array
+     */
     protected $fillable = ['data', 'license'];
+
+    /**
+     * The attributes that should be cast to native types.
+     *
+     * @var array
+     */
+    protected $casts = ['data' => 'array'];
 
     /**
      * Store data
@@ -33,7 +45,7 @@ class License extends Model
         $license = $license ?: new self();
 
         $license->fill([
-            'data'    => serialize($data),
+            'data'    => $data,
             'license' => $license_key,
         ]);
 
