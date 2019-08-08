@@ -39,7 +39,7 @@ class LicenseController extends BaseController
     {
         $this->request = $request;
         $this->logger  = new Logger('License');
-        $this->api_url = env('GIVEWP_LICENSE_ENDPOINT', 'http://givewp.com/edd-sl-api');
+        $this->api_url = env('GIVEWP_LICENSE_ENDPOINT', 'http://givewp.test/edd-sl-api');
 
         $this->logger->pushHandler(new StreamHandler('../logs/license.log'));
     }
