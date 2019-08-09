@@ -38,7 +38,8 @@ class Addon extends Model
      */
     public static function store(string $addon_name, array $data)
     {
-        $addon = self::where('addon', $addon_name)->first();
+        $addon_name = strtolower($addon_name);
+        $addon      = self::where('addon', $addon_name)->first();
 
         // Where not any record found in the table then $addon will set to zero which prevents insertion of the new record.
         // To prevent that we are initializing the model.
