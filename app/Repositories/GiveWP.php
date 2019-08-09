@@ -75,15 +75,9 @@ class GiveWP
      *
      * @param  array  $dataFromGiveWP
      * @param  string  $type
-     *
-     * @return bool
      */
-    private function saveResult($dataFromGiveWP, $type): bool
+    private function saveResult($dataFromGiveWP, $type): void
     {
-        if (empty($dataFromGiveWP)) {
-            return false;
-        }
-
         switch ($type) {
             case 'get_version':
                 if ( ! empty($dataFromGiveWP['new_version'])) {
@@ -117,7 +111,5 @@ class GiveWP
                 }
                 break;
         }
-
-        return true;
     }
 }
