@@ -97,8 +97,8 @@ class LicenseController extends BaseController
     private function handleCheckLicenses(): array
     {
         $response       = array();
-        $licenses       = array_map('trim', explode(',', $this->request->input('licenses')));
-        $licensesFromDB = app(Licenses::class)->get($licenses);
+        $license_keys   = array_map('trim', explode(',', $this->request->input('licenses')));
+        $licensesFromDB = app(Licenses::class)->getAll($license_keys);
 
 
         /*
@@ -109,7 +109,7 @@ class LicenseController extends BaseController
         if (
             $licensesFromDB instanceOf Collection
             && $licensesFromDB->isNotEmpty()
-            && count($licensesFromDB) === count($licenses)
+            && count($licensesFromDB) === count($license_keys)
         ) {
             foreach ($licensesFromDB as $license) {
                 $response[$license->license] = $license->data;

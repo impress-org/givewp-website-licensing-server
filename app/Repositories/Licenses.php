@@ -17,28 +17,27 @@ use Illuminate\Support\Collection;
 class Licenses
 {
     /**
-     * Returns the option for the given key
+     * Returns the license for the given key
      *
      * @param  string|array  $license_key  License key.
      *
-     * @return License|Collection|null
+     * @return License|null
      */
-    public function get($license_key)
+    public function get($license_key): ?Collection
     {
-        $licenses = null;
+        return License::where('license', $license_key)->first();
+    }
 
-        // Exit.
-        if (empty($license_key)) {
-            return $licenses;
-        }
-
-        if (is_array($license_key)) {
-            $licenses = License::whereIn('license', $license_key)->get();
-        } else {
-            $licenses = License::where('license', $license_key)->first();
-        }
-
-        return $licenses;
+    /**
+     * Returns the licenses for the given keys
+     *
+     * @param $license_keys
+     *
+     * @return Collection|null
+     */
+    public function getAll(array $license_keys): ?Collection
+    {
+        return License::whereIn('license', $license_keys)->get();
     }
 
     /**
