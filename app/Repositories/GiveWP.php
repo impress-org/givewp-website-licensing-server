@@ -87,7 +87,7 @@ class GiveWP
         switch ($type) {
             case 'get_version':
                 if ( ! empty($dataFromGiveWP['new_version'])) {
-                    Addon::store($dataFromGiveWP['name'], $dataFromGiveWP);
+                    Addon::store(strtolower($dataFromGiveWP['name']), $dataFromGiveWP);
                 }
 
                 break;

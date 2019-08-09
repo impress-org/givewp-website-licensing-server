@@ -31,7 +31,7 @@ class Addons
             return $addons;
         }
 
-        $addons = Addon::whereRaw("UPPER(addon) LIKE '%{$addon}%'")->first();
+        $addons = Addon::where('addon', 'like', '%' . strtolower($addon) . '%')->first();
 
         return $addons;
     }
