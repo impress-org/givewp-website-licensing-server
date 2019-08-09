@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\Addon;
 use App\Models\License;
 use App\Models\Subscription;
+use App\Repositories\Addons;
+use App\Repositories\Licenses;
+use App\Repositories\Subscriptions;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\DB;
@@ -213,7 +216,7 @@ class LicenseController extends BaseController
     {
         $response       = array();
         $licenses       = array_map('trim', explode(',', $this->request->input('licenses')));
-        $licensesFromDB = License::whereIn('license', $licenses)->select('license', 'data')->get();
+        $licensesFromDB = app(Licenses::class)->get($licenses);
 
 
         /*
@@ -227,7 +230,7 @@ class LicenseController extends BaseController
             && count($licensesFromDB) === count($licenses)
         ) {
             foreach ($licensesFromDB as $license) {
-                $response[$license->license] = unserialize($license->data);
+                $response[$license->license] = $license->data;
             }
         } else {
             try {
@@ -247,16 +250,16 @@ class LicenseController extends BaseController
      */
     private function handleCheckLicense()
     {
-        $response       = array();
-        $license        = trim($this->request->input('license'));
-        $licensesFromDB = License::where('license', $license)->select('license', 'data')->first();
+        $response    = array();
+        $license_key = trim($this->request->input('license'));
+        $license     = app(Licenses::class)->get($license_key);
 
         /*
          * A result set will be count as successful on if:
          *  1. result from database is not empty
          */
-        if ($licensesFromDB instanceof License) {
-            $response = $licensesFromDB->data;
+        if ($license instanceof License) {
+            $response = $license->data;
             $response = $response['check_license'];
         } else {
             try {
@@ -279,11 +282,10 @@ class LicenseController extends BaseController
     {
         $response   = array();
         $addon_name = strtoupper(trim($this->request->input('item_name')));
+        $addon      = app(Addons::class)->get($addon_name);
 
-        $addonFromDB = Addon::whereRaw("UPPER(addon) LIKE '%{$addon_name}%'")->select('addon', 'data')->first();
-
-        if ($addonFromDB instanceof Addon) {
-            $response = $addonFromDB->data;
+        if ($addon instanceof Addon) {
+            $response = $addon->data;
         } else {
             try {
                 $response = $this->getResultFromGiveWP();
@@ -302,18 +304,16 @@ class LicenseController extends BaseController
      */
     private function handleCheckSubscription()
     {
-        $response           = array();
-        $license            = trim($this->request->input('license'));
-        $subscriptionFromDB = Subscription::where('license', $license)->select('license', 'data')->get();
+        $response     = array();
+        $license_key  = trim($this->request->input('license'));
+        $subscription = app(Subscriptions::class)->get($license_key);
 
         /*
          * A result set will be count as successful on if:
          *  1. result from database is not empty
          */
-        if ($subscriptionFromDB instanceof Collection && $subscriptionFromDB->isNotEmpty()) {
-            foreach ($subscriptionFromDB as $license) {
-                $response[$license->license] = unserialize($license->data);
-            }
+        if ($subscription instanceof Subscription) {
+            $response = $subscription->data;
         } else {
             try {
                 $response = $this->getResultFromGiveWP();
