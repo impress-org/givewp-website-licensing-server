@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Repositories\Addons;
+use App\Repositories\GiveWP;
 use App\Repositories\Licenses;
 use App\Repositories\Subscriptions;
 use Illuminate\Support\ServiceProvider;
@@ -29,6 +30,11 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton( Subscriptions::class, function ($app) {
             /* @var \Laravel\Lumen\Application $app */
             return $app->make(Subscriptions::class);
+        });
+
+        $this->app->singleton( GiveWP::class, function ($app) {
+            /* @var \Laravel\Lumen\Application $app */
+            return $app->make(GiveWP::class);
         });
     }
 }
