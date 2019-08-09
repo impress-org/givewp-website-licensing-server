@@ -45,7 +45,7 @@ class Licenses
      *
      * @param  string  $license_key
      *
-     * @return bool|int|null
+     * @return int
      * @throws \Exception
      */
     public function delete(string $license_key)
