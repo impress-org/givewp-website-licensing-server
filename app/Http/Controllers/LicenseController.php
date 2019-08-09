@@ -9,6 +9,8 @@ use App\Repositories\Addons;
 use App\Repositories\GiveWP;
 use App\Repositories\Licenses;
 use App\Repositories\Subscriptions;
+use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
@@ -30,8 +32,6 @@ class LicenseController extends BaseController
      * LicenseController constructor.
      *
      * @param  Request  $request
-     *
-     * @throws \Exception
      */
     public function __construct(Request $request)
     {
@@ -41,11 +41,10 @@ class LicenseController extends BaseController
     /**
      * Handle edd-sl-api endpoint request
      *
-     * @return string
+     * @return JsonResponse
      * @throws ValidationException
-     * @since 0.1
      */
-    public function handle(): string
+    public function handle(): JsonResponse
     {
         $this->validate($this->request, ['edd_action' => 'required|string']);
 
