@@ -9,7 +9,6 @@ use App\Repositories\Addons;
 use App\Repositories\GiveWP;
 use App\Repositories\Licenses;
 use App\Repositories\Subscriptions;
-use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Http\Request;
