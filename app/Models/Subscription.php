@@ -3,13 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Query\Builder;
 
 /**
  * App/Models/License
  *
- * @method static Builder|Subscription updateOrInsert
- * @method static Builder|Subscription where
+ * @method static Subscription updateOrCreate
  */
 class Subscription extends Model
 {
@@ -30,24 +28,16 @@ class Subscription extends Model
     /**
      * Store data
      *
-     * @param  string  $license  License Key.
+     * @param  string  $license_key  License Key.
      * @param  array  $data  Array of subscription data.
      *
-     * @return bool
+     * @return Subscription
      */
-    public static function store(string $license, array $data)
+    public static function store(string $license_key, array $data): Subscription
     {
-        $subscription = self::where('license', $license)->first();
-
-        // Where not any record found in the table then $subscription will set to zero which prevents insertion of the new record.
-        // To prevent that we are initializing the model.
-        $subscription = $subscription ?: new self();
-
-        $subscription->fill([
-            'data'    => $data,
-            'license' => $license,
-        ]);
-
-        return $subscription->save();
+        return self::updateOrCreate(
+            ['license' => $license_key],
+            ['data' => $data]
+        );
     }
 }
