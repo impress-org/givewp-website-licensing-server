@@ -23,7 +23,7 @@ class Licenses
      *
      * @return License|null
      */
-    public function get($license_key): ?Collection
+    public function get($license_key): ?License
     {
         return License::where('license', $license_key)->first();
     }
