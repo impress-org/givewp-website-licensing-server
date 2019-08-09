@@ -191,4 +191,3 @@ class LicenseController extends BaseController
 
 // @todo: check if we are setting correct url for GiveWP request.
 // @todo: check if license expired or not before sending license result.
-// @todo: discuss with jason about refactoring code
