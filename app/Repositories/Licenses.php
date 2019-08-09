@@ -44,4 +44,17 @@ class Licenses
 
         return $licenses;
     }
+
+    /**
+     * Delete stored license data.
+     *
+     * @param  string  $license_key
+     *
+     * @return bool|int|null
+     * @throws \Exception
+     */
+    public function delete(string $license_key)
+    {
+        return License::where('license', $license_key)->delete();
+    }
 }

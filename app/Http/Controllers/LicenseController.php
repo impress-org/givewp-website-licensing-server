@@ -66,8 +66,8 @@ class LicenseController extends BaseController
             case 'deactivate_license':
                 $this->validate($this->request, ['license' => 'required|string', 'item_name' => 'required|string']);
 
-                // Remove saved response.
-                DB::table('license')->where('license', trim($this->request->input('license')))->delete();
+                // Delete stored license data result.
+                app(Licenses::class)->delete(trim($this->request->input('license')));
 
                 $response = $this->getResultFromGiveWP();
                 break;
