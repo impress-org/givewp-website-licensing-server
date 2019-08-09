@@ -32,9 +32,7 @@ class Subscriptions
         }
 
 
-        $subscription = Subscription::where('license', $license_key)
-                                ->select('license', 'data')
-                                ->first();
+        $subscription = Subscription::where('license', $license_key)->first();
 
         return $subscription;
     }

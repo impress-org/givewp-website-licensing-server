@@ -33,13 +33,9 @@ class Licenses
         }
 
         if (is_array($license_key)) {
-            $licenses = License::whereIn('license', $license_key)
-                               ->select('license', 'data')
-                               ->get();
+            $licenses = License::whereIn('license', $license_key)->get();
         } else {
-            $licenses = License::where('license', $license_key)
-                               ->select('license', 'data')
-                               ->first();
+            $licenses = License::where('license', $license_key)->first();
         }
 
         return $licenses;
