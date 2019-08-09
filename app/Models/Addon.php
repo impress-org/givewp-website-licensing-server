@@ -2,12 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * App/Models/License
  *
  * @method static Addon updateOrCreate
+ * @method static Builder|License|null where
+ * @method static Builder|License|null whereIn
  */
 class Addon extends Model
 {

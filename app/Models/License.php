@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * App/Models/License
  *
  * @method static License updateOrCreate
+ * @method static Builder|License|null where
+ * @method static Builder|License|null whereIn
  */
 class License extends Model
 {

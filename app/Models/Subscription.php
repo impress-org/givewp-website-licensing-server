@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 /**
  * App/Models/License
  *
  * @method static Subscription updateOrCreate
+ * @method static Builder|License|null where
  */
 class Subscription extends Model
 {
