@@ -33,7 +33,7 @@ class LicenseController extends BaseController
      *
      * @throws \Exception
      */
-    function __construct(Request $request)
+    public function __construct(Request $request)
     {
         $this->request = $request;
     }
