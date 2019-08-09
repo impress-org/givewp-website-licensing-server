@@ -45,7 +45,7 @@ class LicenseController extends BaseController
      * @throws ValidationException
      * @since 0.1
      */
-    public function handle()
+    public function handle(): string
     {
         $this->validate($this->request, ['edd_action' => 'required|string']);
 
@@ -96,7 +96,7 @@ class LicenseController extends BaseController
      *
      * @return array
      */
-    private function handleCheckLicenses()
+    private function handleCheckLicenses(): array
     {
         $response       = array();
         $licenses       = array_map('trim', explode(',', $this->request->input('licenses')));
@@ -128,7 +128,7 @@ class LicenseController extends BaseController
      *
      * @return array
      */
-    private function handleCheckLicense()
+    private function handleCheckLicense(): array
     {
         $license_key = trim($this->request->input('license'));
         $license     = app(Licenses::class)->get($license_key);
@@ -153,7 +153,7 @@ class LicenseController extends BaseController
      *
      * @return array
      */
-    private function handleGetVersion()
+    private function handleGetVersion(): array
     {
         $addon_name = strtoupper(trim($this->request->input('item_name')));
         $addon      = app(Addons::class)->get($addon_name);
@@ -172,7 +172,7 @@ class LicenseController extends BaseController
      *
      * @return array
      */
-    private function handleCheckSubscription()
+    private function handleCheckSubscription(): array
     {
         $license_key  = trim($this->request->input('license'));
         $subscription = app(Subscriptions::class)->get($license_key);
