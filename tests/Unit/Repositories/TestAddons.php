@@ -21,7 +21,7 @@ class TestAddons extends TestCase
      */
     private $addon;
 
-    function setUp(): void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -60,6 +60,6 @@ class TestAddons extends TestCase
 
         $this->assertInstanceOf(Addon::class, $output);
         $this->assertEquals($addon_name, $output->addon);
-        $this->assertEquals(array('dummy data'), $output->data);
+        $this->assertEquals(['dummy data'], $output->data);
     }
 }

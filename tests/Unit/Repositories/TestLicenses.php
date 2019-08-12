@@ -2,7 +2,6 @@
 
 namespace Tests\Unit\Repositories;
 
-
 use App\Models\License;
 use App\Repositories\Licenses;
 use Illuminate\Database\Eloquent\Collection;
@@ -19,7 +18,7 @@ class TestLicenses extends TestCase
      */
     private $license;
 
-    function setUp(): void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -58,7 +57,7 @@ class TestLicenses extends TestCase
 
         $this->assertInstanceOf(License::class, $output);
         $this->assertEquals($license_key, $output->license);
-        $this->assertEquals(array('dummy data'), $output->data);
+        $this->assertEquals(['dummy data'], $output->data);
     }
 
     /**
@@ -99,7 +98,7 @@ class TestLicenses extends TestCase
      * @covers \App\Repositories\Licenses::delete
      * @throws \Exception
      */
-    function testDelete()
+    public function testDelete()
     {
         $license_key = 'abc';
 

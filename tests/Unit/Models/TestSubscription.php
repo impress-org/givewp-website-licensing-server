@@ -17,7 +17,7 @@ class TestSubscription extends TestCase
      */
     private $license;
 
-    function setUp(): void
+    public function setUp(): void
     {
         parent::setUp();
 
@@ -48,6 +48,6 @@ class TestSubscription extends TestCase
 
         $this->assertInstanceOf(Subscription::class, $output);
         $this->assertEquals($license_key, $output->license);
-        $this->assertEquals(array('dummy data'), $output->data);
+        $this->assertEquals(['dummy data'], $output->data);
     }
 }
