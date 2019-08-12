@@ -8,13 +8,8 @@ use Tests\TestCase;
 use App\Repositories\Subscriptions;
 
 /**
- * Class Subscriptions
- *
- * Repository for handling subscriptions.
- *
- * @since   0.1.0
- *
- * @package App\Repositories
+ * Class TestSubscriptions
+ * @package Test\Repositories
  */
 class TestSubscriptions extends TestCase
 {
