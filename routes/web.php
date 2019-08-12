@@ -1,21 +1,21 @@
 <?php
 
-/*
-|--------------------------------------------------------------------------
-| Application Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register all of the routes for an application.
-| It is a breeze. Simply tell Lumen the URIs it should respond to
-| and give it the Closure to call when that URI is requested.
-|
-*/
+use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Route;
+use Laravel\Lumen\Routing\Router;
 
-/* @var \Laravel\Lumen\Routing\Router $router */
+/* @var Router $router */
 $router->get('/', function () use ($router) {
     return $router->app->version();
 });
 
+
+/*
+|--------------------------------------------------------------------------
+| Public Rest API Endpoints
+|--------------------------------------------------------------------------
+|
+*/
 $router->post('edd-sl-api', 'LicenseController@handle');
 
 $router->post('auth/login', array('uses' => 'AuthController@authenticate'));
@@ -26,8 +26,26 @@ $router->group(
         'prefix'     => 'update',
     ),
     function () use ($router) {
-        $router->post('license', 'StoreDataController@handle' );
-        $router->post('subscription', 'StoreDataController@handle' );
-        $router->post('addon', 'StoreDataController@handle' );
+        $router->post('license', 'StoreDataController@handle');
+        $router->post('subscription', 'StoreDataController@handle');
+        $router->post('addon', 'StoreDataController@handle');
     }
 );
+
+/*
+|--------------------------------------------------------------------------
+| Artisan Routes
+|--------------------------------------------------------------------------
+|
+| These are the routes intended for exposing artisan commands as endpoints
+| for the purpose of running commands on App Engine.
+|
+| All routes are in the Artisan namespace and
+| All endpoints begin with /artisan/ prefixed
+*/
+
+if (! App::environment('production')) {
+    // Dangerous endpoint, do not even add routes on production
+    Route::get('/app/fresh', 'ArtisanController@fresh');
+    Route::post('/app/fresh', 'ArtisanController@fresh');
+}
