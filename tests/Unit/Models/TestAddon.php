@@ -1,5 +1,5 @@
 <?php
-namespace Test\Models;
+namespace Test\Unit\Models;
 
 use App\Models\Addon;
 use App\Repositories\Addons;
