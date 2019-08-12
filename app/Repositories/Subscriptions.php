@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Subscription;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Class Subscriptions
@@ -20,9 +21,9 @@ class Subscriptions
      *
      * @param  string|array  $license_key  License key.
      *
-     * @return Subscription|null
+     * @return Subscription|Builder|null
      */
-    public function get($license_key)
+    public function get($license_key): ?Subscription
     {
         $subscription = null;
 
@@ -31,9 +32,6 @@ class Subscriptions
             return $subscription;
         }
 
-
-        $subscription = Subscription::where('license', $license_key)->first();
-
-        return $subscription;
+        return Subscription::where('license', $license_key)->first();
     }
 }
