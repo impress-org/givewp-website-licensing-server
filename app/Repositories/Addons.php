@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Addon;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Class Add-ons
@@ -20,7 +21,7 @@ class Addons
      *
      * @param  string  $addon  Add-on name.
      *
-     * @return Addon|null
+     * @return Addon|Builder|null
      */
     public function get(string $addon)
     {
@@ -31,8 +32,10 @@ class Addons
             return $addons;
         }
 
-        $addons = Addon::where('addon', 'like', '%' . strtolower($addon) . '%')->first();
-
-        return $addons;
+        return Addon::where(
+            'addon',
+            'like',
+            '%' . strtolower($addon) . '%'
+        )->first();
     }
 }
