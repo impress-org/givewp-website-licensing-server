@@ -1,4 +1,8 @@
 {
+    "scripts": {
+        "precise-commits": "precise-commits",
+        "prettier": "prettier --write"
+    },
     "devDependencies": {
         "@prettier/plugin-php": "^0.11.2",
         "husky": "^3.0.3",
