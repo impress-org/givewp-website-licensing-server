@@ -56,7 +56,7 @@ class GiveWP
             $api_url,
             array(
                 'form_params' => $query_param,
-                'timeout'     => 15,
+                'timeout'     => 30,
                 'headers'     => [
                     'User-Agent' => env('APP_URL') . '/' . config('app.version')
                 ]
