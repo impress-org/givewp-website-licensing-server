@@ -44,7 +44,7 @@ class GiveWP
         }
 
         // Url must be set before sending query to GiveWP otherwise a;; url will set to this proxy server.
-        if ( ! $request->filled('url')) {
+        if (! $request->filled('url')) {
             // Attempt to grab the URL from the user agent if no URL is specified
             $domain             = array_map('trim', explode(';', $_SERVER['HTTP_USER_AGENT']));
             $query_param['url'] = ! empty($domain[1]) ? trim($domain[1]) : '';
@@ -57,6 +57,9 @@ class GiveWP
             array(
                 'form_params' => $query_param,
                 'timeout'     => 15,
+                'headers'     => [
+                    'User-Agent' => env('APP_URL') . '/' . config('app.version')
+                ]
             )
         );
 
@@ -80,14 +83,14 @@ class GiveWP
     {
         switch ($type) {
             case 'get_version':
-                if ( ! empty($dataFromGiveWP['new_version'])) {
+                if (! empty($dataFromGiveWP['new_version'])) {
                     Addon::store($dataFromGiveWP['name'], $dataFromGiveWP);
                 }
 
                 break;
 
             case 'check_subscription':
-                if ( ! empty($dataFromGiveWP['subscription_key'])) {
+                if (! empty($dataFromGiveWP['subscription_key'])) {
                     Subscription::store($dataFromGiveWP['license_key'], $dataFromGiveWP);
                 }
 
@@ -95,15 +98,15 @@ class GiveWP
             case 'check_license':
             case 'check_licenses':
                 foreach ($dataFromGiveWP as $license_key => $data) {
-                    if ( ! empty($data['check_license']) && ! empty($data['check_license']['license_key'])) {
+                    if (! empty($data['check_license']) && ! empty($data['check_license']['license_key'])) {
                         License::store($license_key, $data);
                     }
 
-                    if ( ! empty($data['get_version']) && ! empty($data['get_version']['new_version'])) {
+                    if (! empty($data['get_version']) && ! empty($data['get_version']['new_version'])) {
                         Addon::store($data['get_version']['name'], $data['get_version']);
-                    } elseif ( ! empty($data['get_versions'])) {
+                    } elseif (! empty($data['get_versions'])) {
                         foreach ($data['get_versions'] as $addon) {
-                            if ( ! empty($addon['newer_version'])) {
+                            if (! empty($addon['newer_version'])) {
                                 Addon::store($addon['name'], $addon);
                             }
                         }
