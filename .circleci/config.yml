@@ -60,7 +60,7 @@ commands:
                    DB_USERNAME,${<< parameters.db-username >>}
                    DB_PASSWORD,${<< parameters.db-password >>}
                    DB_CONNECTION_NAME,${<< parameters.db-connection-name >>}
-                   GIVEWP_LICENSE_ENDPOINT,${<< parameters.givewp-license-endpoint >>}
+                   GIVEWP_LICENSE_ENDPOINT,<< parameters.givewp-license-endpoint >>
 
   setup-and-deploy-app-engine:
     description: "Installs and initializes gcloud, then deploys"
