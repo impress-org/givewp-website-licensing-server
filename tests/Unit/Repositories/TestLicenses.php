@@ -121,4 +121,42 @@ class TestLicenses extends TestCase
         $this->assertIsInt($output);
         $this->assertEquals($license->id, $output);
     }
+
+    /**
+     * @covers \App\Repositories\Licenses::delete
+     */
+    public function testShouldGetNullWhenDeleteNonExistingLicense(): void
+    {
+        $result = app(Licenses::class)->delete('abc');
+        $this->assertEquals(null, $result);
+    }
+
+    /**
+     * @covers \App\Repositories\Licenses::delete
+     */
+    public function testShouldGetBoolWhenDeleteLicense(): void
+    {
+        License::store('abc', ['dummy data']);
+        $result = app(Licenses::class)->delete('abc');
+        $this->assertEquals(true, $result);
+    }
+
+    /**
+     * @covers \App\Repositories\Licenses::deleteByAddon
+     */
+    public function testShouldGetNullWhenDeleteNonExistingLicenseByAddon(): void
+    {
+        $result = app(Licenses::class)->deleteByAddon('xyz');
+        $this->assertEquals(null, $result);
+    }
+
+    /**
+     * @covers \App\Repositories\Licenses::deleteByAddon
+     */
+    public function testShouldGetBoolWhenDeleteLicenseByAddon(): void
+    {
+        License::store('abc', ['get_version' => ['name'=>'xyx'] ]);
+        $result = app(Licenses::class)->delete('abc');
+        $this->assertEquals(true, $result);
+    }
 }
