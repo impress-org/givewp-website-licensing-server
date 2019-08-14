@@ -34,23 +34,22 @@ class TestLicenses extends TestCase
     }
 
     /**
-     * @covers \App\Repositories\Licenses::get
+     * @cover \App\Repositories\Licenses::get
      */
-    public function testGet()
+    public function testShouldReturnNullWhenGetNonExistingLicense(): void
     {
         $license_key = 'abc';
-
-        /**
-         * Case: if license does not exist
-         */
-        /* @var License|null $output */
         $output = $this->license->get($license_key);
 
         $this->assertEquals(null, $output);
+    }
 
-        /**
-         * Case: If license exist
-         */
+    /**
+     * @cover \App\Repositories\Licenses::get
+     */
+    public function testShouldReturnLicenseModelWhenGetNonExistingLicense(): void
+    {
+        $license_key = 'abc';
         License::store($license_key, ['dummy data']);
 
         $output = $this->license->get($license_key);
@@ -61,23 +60,25 @@ class TestLicenses extends TestCase
     }
 
     /**
-     * @covers \App\Repositories\Licenses::getAll
+     * @cover \App\Repositories\Licenses::getAll
      */
-    public function testGetAll()
+    public function testShouldReturnNullWhenGetAllNonExistingLicense(): void
     {
         $license_keys = ['abc', 'def', 'ghi'];
 
-        /**
-         * Case: if licenses do not exist
-         */
         /* @var Collection|null $output */
         $output = $this->license->get($license_keys);
 
         $this->assertEquals(null, $output);
+    }
 
-        /**
-         * Case: If licenses exist
-         */
+    /**
+     * @cover \App\Repositories\Licenses::getAll
+     */
+    public function testShouldReturnCollectionObjectWhenGetAllLicense(): void
+    {
+        $license_keys = ['abc', 'def', 'ghi'];
+
         License::store($license_keys[0], [$license_keys[0]]);
         License::store($license_keys[1], [$license_keys[1]]);
         License::store($license_keys[2], [$license_keys[2]]);
@@ -96,67 +97,47 @@ class TestLicenses extends TestCase
 
     /**
      * @covers \App\Repositories\Licenses::delete
-     * @throws \Exception
      */
-    public function testDelete()
+    public function testShouldGetZeroWhenDeleteNonExistingLicense(): void
     {
-        $license_key = 'abc';
+        $result = app(Licenses::class)->delete('abc');
 
-        /**
-         * Case: if license does not exist
-         */
-        /* @var License|null $output */
-        $output = $this->license->delete($license_key);
-
-        $this->assertIsInt($output);
-        $this->assertEquals(0, $output);
-
-        /**
-         * Case: If license exist
-         */
-        $license = License::store($license_key, ['dummy data']);
-
-        $output = $this->license->delete($license_key);
-
-        $this->assertIsInt($output);
-        $this->assertEquals($license->id, $output);
+        $this->assertEquals(0, $result);
+        $this->notSeeInDatabase('licenses', array( 'license' => 'abc'));
     }
 
     /**
      * @covers \App\Repositories\Licenses::delete
      */
-    public function testShouldGetNullWhenDeleteNonExistingLicense(): void
+    public function testShouldGetOneWhenDeleteLicense(): void
     {
+        $license = License::store('abc', ['dummy data']);
         $result = app(Licenses::class)->delete('abc');
-        $this->assertEquals(null, $result);
-    }
 
-    /**
-     * @covers \App\Repositories\Licenses::delete
-     */
-    public function testShouldGetBoolWhenDeleteLicense(): void
-    {
-        License::store('abc', ['dummy data']);
-        $result = app(Licenses::class)->delete('abc');
-        $this->assertEquals(true, $result);
+        $this->assertEquals($license->id, $result);
+        $this->notSeeInDatabase('licenses', array( 'license' => 'abc'));
     }
 
     /**
      * @covers \App\Repositories\Licenses::deleteByAddon
      */
-    public function testShouldGetNullWhenDeleteNonExistingLicenseByAddon(): void
+    public function testShouldGetZeroWhenDeleteNonExistingLicenseByAddon(): void
     {
         $result = app(Licenses::class)->deleteByAddon('xyz');
-        $this->assertEquals(null, $result);
+
+        $this->assertEquals(0, $result);
+        $this->notSeeInDatabase('licenses', array( 'license' => 'xyz'));
     }
 
     /**
      * @covers \App\Repositories\Licenses::deleteByAddon
      */
-    public function testShouldGetBoolWhenDeleteLicenseByAddon(): void
+    public function testShouldGetOneWhenDeleteLicenseByAddon(): void
     {
-        License::store('abc', ['get_version' => ['name'=>'xyx'] ]);
+        $license = License::store('abc', ['get_version' => ['name'=>'xyx'] ]);
         $result = app(Licenses::class)->delete('abc');
-        $this->assertEquals(true, $result);
+
+        $this->assertEquals($license->id, $result);
+        $this->notSeeInDatabase('licenses', array( 'license' => 'abc'));
     }
 }

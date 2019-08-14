@@ -31,7 +31,7 @@ class TestAddons extends TestCase
     /**
      * Checks to see that the repository is injected into the container
      */
-    public function testContainer()
+    public function testContainer(): void
     {
         $this->assertInstanceOf(Addons::class, app(Addons::class));
     }
@@ -39,21 +39,20 @@ class TestAddons extends TestCase
     /**
      * @cover \App\Repositories\Addons::get
      */
-    public function testGet()
+    public function testShouldReturnNullWhenGetNonExistingAddon(): void
     {
         $addon_name = 'abc';
-
-        /**
-         * Case: if license does not exist
-         */
-        /* @var Addons|null $output */
         $output = $this->addon->get($addon_name);
 
         $this->assertEquals(null, $output);
+    }
 
-        /**
-         * Case: If license exist
-         */
+    /**
+     * @cover \App\Repositories\Addons::get
+     */
+    public function testShouldReturnAddonModelWhenGetAddon(): void
+    {
+        $addon_name = 'abc';
         Addon::store($addon_name, ['dummy data']);
 
         $output = $this->addon->get($addon_name);
@@ -67,11 +66,12 @@ class TestAddons extends TestCase
     /**
      * @covers \App\Repositories\Addons::delete
      */
-    public function testShouldGetNullWhenDeleteNonExistingAddon(): void
+    public function testShouldGetZeroWhenDeleteNonExistingAddon(): void
     {
         $result = app(Addons::class)->delete('abc');
-        $this->assertEquals(null, $result);
 
+        $this->assertEquals(0, $result);
+        $this->notSeeInDatabase('addons', array( 'addon' => 'abc'));
     }
 
     /**
@@ -79,8 +79,10 @@ class TestAddons extends TestCase
      */
     public function testShouldGetBoolWhenDeleteAddon(): void
     {
-        Addon::store('abc', ['dummy data']);
+        $addon = Addon::store('abc', ['dummy data']);
         $result = app(Addons::class)->delete('abc');
-        $this->assertEquals(true, $result);
+
+        $this->assertEquals($addon->id, $result);
+        $this->notSeeInDatabase('addons', array( 'addon' => 'abc'));
     }
 }

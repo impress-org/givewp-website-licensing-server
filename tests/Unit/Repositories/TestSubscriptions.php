@@ -31,7 +31,7 @@ class TestSubscriptions extends TestCase
     /**
      * Checks to see that the repository is injected into the container
      */
-    public function testContainer()
+    public function testContainer(): void
     {
         $this->assertInstanceOf(
             Subscriptions::class,
@@ -42,18 +42,20 @@ class TestSubscriptions extends TestCase
     /**
      * @cover \App\Repositories\Subscriptions::get
      */
-    public function testGet()
+    public function testShouldReturnNullWhenGetNonExistingSubscription(): void
     {
         $license_key = 'abc';
-
-        /**
-         * Case: if license does not exist
-         */
-        /* @var Subscriptions|null $output */
         $output = $this->subscription->get($license_key);
 
         $this->assertEquals(null, $output);
+    }
 
+    /**
+     * @cover \App\Repositories\Subscriptions::get
+     */
+    public function testShouldReturnSubscriptionModelWhenGetSubscription(): void
+    {
+        $license_key = 'abc';
         /**
          * Case: If license exist
          */
@@ -69,10 +71,12 @@ class TestSubscriptions extends TestCase
     /**
      * @covers \App\Repositories\Subscriptions::delete
      */
-    public function testShouldGetNullWhenDeleteNonExistingSubscription(): void
+    public function testShouldGetZeroWhenDeleteNonExistingSubscription(): void
     {
         $result = app(Subscriptions::class)->delete('abc');
-        $this->assertEquals(null, $result);
+
+        $this->assertEquals(0, $result);
+        $this->notSeeInDatabase('subscriptions', array( 'license' => 'abc'));
     }
 
     /**
@@ -80,8 +84,10 @@ class TestSubscriptions extends TestCase
      */
     public function testShouldGetBoolWhenDeletesubscription(): void
     {
-        Subscription::store('abc', ['dummy data']);
+        $subscription = Subscription::store('abc', ['dummy data']);
         $result = app(Subscriptions::class)->delete('abc');
-        $this->assertEquals(true, $result);
+
+        $this->assertEquals($subscription->id, $result);
+        $this->notSeeInDatabase('subscriptions', array( 'license' => 'abc'));
     }
 }
