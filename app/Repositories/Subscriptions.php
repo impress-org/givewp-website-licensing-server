@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Subscription;
+use Exception;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -33,5 +34,18 @@ class Subscriptions
         }
 
         return Subscription::where('license', $license_key)->first();
+    }
+
+    /**
+     * Delete stored subscription data.
+     *
+     * @param  string  $license_key
+     *
+     * @return int
+     * @throws Exception
+     */
+    public function delete(string $license_key): int
+    {
+        return Subscription::where('license', $license_key)->delete();
     }
 }

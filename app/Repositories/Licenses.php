@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\License;
+use Exception;
 use Illuminate\Support\Collection;
 
 /**
@@ -46,10 +47,27 @@ class Licenses
      * @param  string  $license_key
      *
      * @return int
-     * @throws \Exception
+     * @throws Exception
      */
-    public function delete(string $license_key)
+    public function delete(string $license_key): int
     {
         return License::where('license', $license_key)->delete();
+    }
+
+    /**
+     * Delete license by add-on
+     *
+     * @param $addon
+     *
+     * @return bool|mixed|null
+     * @throws Exception
+     */
+    public function deleteByAddon($addon)
+    {
+        return License::where(
+            'data',
+            'like',
+            '%' . strtolower($addon) . '%'
+        )->delete();
     }
 }

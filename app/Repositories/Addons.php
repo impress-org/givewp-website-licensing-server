@@ -38,4 +38,21 @@ class Addons
             '%' . strtolower($addon) . '%'
         )->first();
     }
+
+    /**
+     * Delete add-on
+     *
+     * @param $addon
+     *
+     * @return bool|mixed|null
+     * @throws \Exception
+     */
+    public function delete($addon)
+    {
+        return Addon::where(
+            'addon',
+            'like',
+            '%' . strtolower($addon) . '%'
+        )->delete();
+    }
 }
