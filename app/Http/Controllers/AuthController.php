@@ -45,7 +45,7 @@ class AuthController extends BaseController
     public function __construct(Request $request)
     {
         $this->request = $request;
-        $this->user = env('GIVEWP_USER');
+        $this->user    = env('GIVEWP_USER');
         $this->passkey = env('GIVEWP_PASSKEY');
     }
 
@@ -81,7 +81,10 @@ class AuthController extends BaseController
             'password' => 'required',
         ));
 
-        if (! $this->user || ! $this->passkey) {
+        if (! $this->user
+            || ! $this->passkey
+            || ($this->user !== $this->request->input('email'))
+        ) {
             return response()->json(array(
                 'msg' => 'User does not exist.',
             ), 400);
