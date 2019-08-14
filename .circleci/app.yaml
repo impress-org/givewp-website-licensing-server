@@ -35,6 +35,11 @@ env_variables:
 
     GIVEWP_LICENSE_ENDPOINT: [GIVEWP_LICENSE_ENDPOINT]
 
+    GIVEWP_USER: [GIVEWP_USER]
+    GIVEWP_PASSKEY: [GIVEWP_PASSKEY]
+
+    JWT_SECRET: [JWT_SECRET]
+
 beta_settings:
     cloud_sql_instances: [DB_CONNECTION_NAME]
 

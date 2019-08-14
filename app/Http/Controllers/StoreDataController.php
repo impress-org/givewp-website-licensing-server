@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Repositories\Addons;
 use App\Repositories\Licenses;
 use App\Repositories\Subscriptions;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
@@ -36,7 +37,7 @@ class StoreDataController extends BaseController
     /**
      * Handle store data requests
      *
-     * @return string
+     * @return JsonResponse
      */
     public function handle()
     {
@@ -62,7 +63,7 @@ class StoreDataController extends BaseController
      *
      * @return bool
      */
-    private function handleAddonUpdate()
+    private function handleAddonUpdate(): bool
     {
         if (! $this->request->filled('addon')) {
             return false;
@@ -81,7 +82,7 @@ class StoreDataController extends BaseController
      *
      * @return bool
      */
-    private function handleLicenseUpdate()
+    private function handleLicenseUpdate(): bool
     {
         if (! $this->request->filled('license')) {
             return false;
@@ -97,7 +98,7 @@ class StoreDataController extends BaseController
      *
      * @return bool
      */
-    private function handleSubscriptionUpdate()
+    private function handleSubscriptionUpdate(): bool
     {
         if (! $this->request->filled('license')) {
             return false;
