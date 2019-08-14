@@ -47,6 +47,12 @@ commands:
         type: env_var_name
       givewp-license-endpoint:
         type: string
+      givewp-user:
+        type: string
+      givewp-passkey:
+        type: string
+      jwt-secret:
+        type: string
     steps:
       - run:
           name:    Set up App Engine config
@@ -61,6 +67,9 @@ commands:
                    DB_PASSWORD,${<< parameters.db-password >>}
                    DB_CONNECTION_NAME,${<< parameters.db-connection-name >>}
                    GIVEWP_LICENSE_ENDPOINT,<< parameters.givewp-license-endpoint >>
+                   GIVEWP_USER,${<< parameters.givewp-user >>}
+                   GIVEWP_PASSKEY,${<< parameters.givewp-passkey >>}
+                   JWT_SECRET,${<< parameters.jwt-token >>}
 
   setup-and-deploy-app-engine:
     description: "Installs and initializes gcloud, then deploys"
@@ -145,6 +154,9 @@ jobs:
           db-password:             STAGING_DB_PASSWORD
           db-connection-name:      STAGING_DB_CONNECTION_NAME
           givewp-license-endpoint: http://staging.givewp.com/edd-sl-api
+          givewp-user:             GIVEWP_USER
+          givewp-passkey:          GIVE_PASSKEY
+          jwt-token:               JWT_TOKEN
 
       - setup-and-deploy-app-engine:
           gcloud-service-key:  STAGING_GCP_SERVICE_KEY
@@ -168,6 +180,9 @@ jobs:
           db-password:             PROD_DB_PASSWORD
           db-connection-name:      PROD_DB_CONNECTION_NAME
           givewp-license-endpoint: https://givewp.com/edd-sl-api
+          givewp-user:             GIVEWP_USER
+          givewp-passkey:          GIVE_PASSKEY
+          jwt-token:               JWT_TOKEN
 
       - setup-and-deploy-app-engine:
           gcloud-service-key:  PROD_GCP_SERVICE_KEY
