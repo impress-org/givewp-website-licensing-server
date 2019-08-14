@@ -81,10 +81,7 @@ class AuthController extends BaseController
             'password' => 'required',
         ));
 
-        if (! $this->user
-            || ! $this->passkey
-            || ($this->user !== $this->request->input('email'))
-        ) {
+        if ($this->user !== $this->request->input('email')) {
             return response()->json(array(
                 'msg' => 'User does not exist.',
             ), 400);
@@ -99,7 +96,7 @@ class AuthController extends BaseController
 
         // Bad Request response
         return response()->json(array(
-            'mag' => 'Email or password is wrong.',
+            'msg' => 'Email or password is wrong.',
         ), 400);
     }
 }
