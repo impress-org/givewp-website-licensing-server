@@ -65,4 +65,23 @@ class TestSubscriptions extends TestCase
         $this->assertEquals($license_key, $output->license);
         $this->assertEquals(['dummy data'], $output->data);
     }
+
+    /**
+     * @covers \App\Repositories\Subscriptions::delete
+     */
+    public function testShouldGetNullWhenDeleteNonExistingSubscription(): void
+    {
+        $result = app(Subscriptions::class)->delete('abc');
+        $this->assertEquals(null, $result);
+    }
+
+    /**
+     * @covers \App\Repositories\Subscriptions::delete
+     */
+    public function testShouldGetBoolWhenDeletesubscription(): void
+    {
+        Subscription::store('abc', ['dummy data']);
+        $result = app(Subscriptions::class)->delete('abc');
+        $this->assertEquals(true, $result);
+    }
 }
