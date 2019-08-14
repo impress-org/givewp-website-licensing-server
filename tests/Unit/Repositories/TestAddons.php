@@ -62,4 +62,25 @@ class TestAddons extends TestCase
         $this->assertEquals($addon_name, $output->addon);
         $this->assertEquals(['dummy data'], $output->data);
     }
+
+
+    /**
+     * @covers \App\Repositories\Addons::delete
+     */
+    public function testShouldGetNullWhenDeleteNonExistingAddon(): void
+    {
+        $result = app(Addons::class)->delete('abc');
+        $this->assertEquals(null, $result);
+
+    }
+
+    /**
+     * @covers \App\Repositories\Addons::delete
+     */
+    public function testShouldGetBoolWhenDeleteAddon(): void
+    {
+        Addon::store('abc', ['dummy data']);
+        $result = app(Addons::class)->delete('abc');
+        $this->assertEquals(true, $result);
+    }
 }
