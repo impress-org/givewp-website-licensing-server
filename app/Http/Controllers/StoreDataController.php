@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\Addons;
+use App\Repositories\Licenses;
+use App\Repositories\Subscriptions;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 /**
@@ -62,13 +64,14 @@ class StoreDataController extends BaseController
      */
     private function handleAddonUpdate()
     {
-        if ( ! $this->request->filled('addon')) {
+        if (! $this->request->filled('addon')) {
             return false;
         }
 
         $addon = $this->request->input('addon');
-        DB::table('addon')->whereRaw("addon LIKE '%{$addon}%'")->delete();
-        DB::table('license')->whereRaw("data LIKE '%{$addon}%'")->delete();
+
+        app(Addons::class)->delete($addon);
+        app(Licenses::class)->deleteByAddon($addon);
 
         return true;
     }
@@ -80,11 +83,11 @@ class StoreDataController extends BaseController
      */
     private function handleLicenseUpdate()
     {
-        if ( ! $this->request->filled('license')) {
+        if (! $this->request->filled('license')) {
             return false;
         }
 
-        DB::table('license')->where('license', trim($this->request->input('license')))->delete();
+        app(Licenses::class)->delete(trim($this->request->input('license')));
 
         return true;
     }
@@ -96,11 +99,11 @@ class StoreDataController extends BaseController
      */
     private function handleSubscriptionUpdate()
     {
-        if ( ! $this->request->filled('license')) {
+        if (! $this->request->filled('license')) {
             return false;
         }
 
-        DB::table('subscription')->where('license', $this->request->input('license'))->delete();
+        app(Subscriptions::class)->delete(trim($this->request->input('license')));
 
         return true;
     }
