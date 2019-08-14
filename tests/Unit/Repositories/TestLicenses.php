@@ -110,6 +110,7 @@ class TestLicenses extends TestCase
 
         $this->assertIsInt($output);
         $this->assertEquals(0, $output);
+        $this->notSeeInDatabase('licenses', array( 'license' => 'abc'));
 
         /**
          * Case: If license exist
@@ -120,43 +121,52 @@ class TestLicenses extends TestCase
 
         $this->assertIsInt($output);
         $this->assertEquals($license->id, $output);
+        $this->notSeeInDatabase('licenses', array( 'license' => 'abc'));
     }
 
     /**
      * @covers \App\Repositories\Licenses::delete
      */
-    public function testShouldGetNullWhenDeleteNonExistingLicense(): void
+    public function testShouldGetZeroWhenDeleteNonExistingLicense(): void
     {
         $result = app(Licenses::class)->delete('abc');
-        $this->assertEquals(null, $result);
+
+        $this->assertEquals(0, $result);
+        $this->notSeeInDatabase('licenses', array( 'license' => 'abc'));
     }
 
     /**
      * @covers \App\Repositories\Licenses::delete
      */
-    public function testShouldGetBoolWhenDeleteLicense(): void
+    public function testShouldGetOneWhenDeleteLicense(): void
     {
-        License::store('abc', ['dummy data']);
+        $license = License::store('abc', ['dummy data']);
         $result = app(Licenses::class)->delete('abc');
-        $this->assertEquals(true, $result);
+
+        $this->assertEquals($license->id, $result);
+        $this->notSeeInDatabase('licenses', array( 'license' => 'abc'));
     }
 
     /**
      * @covers \App\Repositories\Licenses::deleteByAddon
      */
-    public function testShouldGetNullWhenDeleteNonExistingLicenseByAddon(): void
+    public function testShouldGetZeroWhenDeleteNonExistingLicenseByAddon(): void
     {
         $result = app(Licenses::class)->deleteByAddon('xyz');
-        $this->assertEquals(null, $result);
+
+        $this->assertEquals(0, $result);
+        $this->notSeeInDatabase('licenses', array( 'license' => 'xyz'));
     }
 
     /**
      * @covers \App\Repositories\Licenses::deleteByAddon
      */
-    public function testShouldGetBoolWhenDeleteLicenseByAddon(): void
+    public function testShouldGetOneWhenDeleteLicenseByAddon(): void
     {
-        License::store('abc', ['get_version' => ['name'=>'xyx'] ]);
+        $license = License::store('abc', ['get_version' => ['name'=>'xyx'] ]);
         $result = app(Licenses::class)->delete('abc');
-        $this->assertEquals(true, $result);
+
+        $this->assertEquals($license->id, $result);
+        $this->notSeeInDatabase('licenses', array( 'license' => 'abc'));
     }
 }

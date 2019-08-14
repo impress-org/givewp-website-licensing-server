@@ -67,11 +67,12 @@ class TestAddons extends TestCase
     /**
      * @covers \App\Repositories\Addons::delete
      */
-    public function testShouldGetNullWhenDeleteNonExistingAddon(): void
+    public function testShouldGetZeroWhenDeleteNonExistingAddon(): void
     {
         $result = app(Addons::class)->delete('abc');
-        $this->assertEquals(null, $result);
 
+        $this->assertEquals(0, $result);
+        $this->notSeeInDatabase('addons', array( 'addon' => 'abc'));
     }
 
     /**
@@ -79,8 +80,10 @@ class TestAddons extends TestCase
      */
     public function testShouldGetBoolWhenDeleteAddon(): void
     {
-        Addon::store('abc', ['dummy data']);
+        $addon = Addon::store('abc', ['dummy data']);
         $result = app(Addons::class)->delete('abc');
-        $this->assertEquals(true, $result);
+
+        $this->assertEquals($addon->id, $result);
+        $this->notSeeInDatabase('addons', array( 'addon' => 'abc'));
     }
 }

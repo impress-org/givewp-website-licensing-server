@@ -69,10 +69,12 @@ class TestSubscriptions extends TestCase
     /**
      * @covers \App\Repositories\Subscriptions::delete
      */
-    public function testShouldGetNullWhenDeleteNonExistingSubscription(): void
+    public function testShouldGetZeroWhenDeleteNonExistingSubscription(): void
     {
         $result = app(Subscriptions::class)->delete('abc');
-        $this->assertEquals(null, $result);
+
+        $this->assertEquals(0, $result);
+        $this->notSeeInDatabase('subscriptions', array( 'license' => 'abc'));
     }
 
     /**
@@ -80,8 +82,10 @@ class TestSubscriptions extends TestCase
      */
     public function testShouldGetBoolWhenDeletesubscription(): void
     {
-        Subscription::store('abc', ['dummy data']);
+        $subscription = Subscription::store('abc', ['dummy data']);
         $result = app(Subscriptions::class)->delete('abc');
-        $this->assertEquals(true, $result);
+
+        $this->assertEquals($subscription->id, $result);
+        $this->notSeeInDatabase('subscriptions', array( 'license' => 'abc'));
     }
 }
