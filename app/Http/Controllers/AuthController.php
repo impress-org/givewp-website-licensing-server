@@ -4,8 +4,10 @@ namespace App\Http\Controllers;
 
 use App\User;
 use Firebase\JWT\JWT;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 /**
@@ -22,6 +24,18 @@ class AuthController extends BaseController
     private $request;
 
     /**
+     * User passkey
+     * @var string
+     */
+    private $passkey;
+
+    /**
+     * User
+     * @var string
+     */
+    private $user;
+
+    /**
      * Create a new controller instance.
      *
      * @param  Request  $request
@@ -31,20 +45,20 @@ class AuthController extends BaseController
     public function __construct(Request $request)
     {
         $this->request = $request;
+        $this->user = env('GIVEWP_USER');
+        $this->passkey = env('GIVEWP_PASSKEY');
     }
 
     /**
      * Create a new token.
      *
-     * @param  \App\User  $user
-     *
      * @return string
      */
-    protected function jwt(User $user)
+    private function jwt(): string
     {
         $payload = [
             'iss' => 'lumen-jwt', // Issuer of the token
-            'sub' => $user->id, // Subject of the token
+            'sub' => $this->user, // Subject of the token
             'iat' => time(), // Time when JWT was issued.
             'exp' => time() + 10 * 60 // Expiration time
         ];
@@ -57,30 +71,27 @@ class AuthController extends BaseController
     /**
      * Authenticate user.
      *
-     * @return \Illuminate\Http\JsonResponse
-     * @throws \Illuminate\Validation\ValidationException
+     * @return JsonResponse
+     * @throws ValidationException
      */
-    public function authenticate()
+    public function authenticate(): JsonResponse
     {
         $this->validate($this->request, array(
             'email'    => 'required|email',
             'password' => 'required',
         ));
 
-        // Find the user by email
-        $user = User::where('email', $this->request->input('email'))->first();
-
-        if ( ! $user) {
+        if (! $this->user || ! $this->passkey) {
             return response()->json(array(
-                'msg' => 'Email does not exist.',
+                'msg' => 'User does not exist.',
             ), 400);
         }
 
         // Verify the password and generate the token
-        if (Hash::check($this->request->input('password'), $user->password)) {
+        if (Hash::check($this->request->input('password'), $this->passkey)) {
             return response()->json(array(
-                'token' => $this->jwt($user),
-            ), 200);
+                'token' => $this->jwt(),
+            ));
         }
 
         // Bad Request response
