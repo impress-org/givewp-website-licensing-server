@@ -46,10 +46,10 @@ class Licenses
      *
      * @param  string  $license_key
      *
-     * @return int
+     * @return bool|mixed|null
      * @throws Exception
      */
-    public function delete(string $license_key): int
+    public function delete(string $license_key)
     {
         return License::where('license', $license_key)->delete();
     }
