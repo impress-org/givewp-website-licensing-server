@@ -31,7 +31,7 @@ class TestSubscriptions extends TestCase
     /**
      * Checks to see that the repository is injected into the container
      */
-    public function testContainer()
+    public function testContainer(): void
     {
         $this->assertInstanceOf(
             Subscriptions::class,
@@ -42,18 +42,20 @@ class TestSubscriptions extends TestCase
     /**
      * @cover \App\Repositories\Subscriptions::get
      */
-    public function testGet()
+    public function testShouldReturnNullWhenGetNonExistingSubscription(): void
     {
         $license_key = 'abc';
-
-        /**
-         * Case: if license does not exist
-         */
-        /* @var Subscriptions|null $output */
         $output = $this->subscription->get($license_key);
 
         $this->assertEquals(null, $output);
+    }
 
+    /**
+     * @cover \App\Repositories\Subscriptions::get
+     */
+    public function testShouldReturnSubscriptionModelWhenGetSubscription(): void
+    {
+        $license_key = 'abc';
         /**
          * Case: If license exist
          */

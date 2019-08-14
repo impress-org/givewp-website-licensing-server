@@ -34,23 +34,22 @@ class TestLicenses extends TestCase
     }
 
     /**
-     * @covers \App\Repositories\Licenses::get
+     * @cover \App\Repositories\Licenses::get
      */
-    public function testGet()
+    public function testShouldReturnNullWhenGetNonExistingLicense(): void
     {
         $license_key = 'abc';
-
-        /**
-         * Case: if license does not exist
-         */
-        /* @var License|null $output */
         $output = $this->license->get($license_key);
 
         $this->assertEquals(null, $output);
+    }
 
-        /**
-         * Case: If license exist
-         */
+    /**
+     * @cover \App\Repositories\Licenses::get
+     */
+    public function testShouldReturnLicenseModelWhenGetNonExistingLicense(): void
+    {
+        $license_key = 'abc';
         License::store($license_key, ['dummy data']);
 
         $output = $this->license->get($license_key);
@@ -61,23 +60,25 @@ class TestLicenses extends TestCase
     }
 
     /**
-     * @covers \App\Repositories\Licenses::getAll
+     * @cover \App\Repositories\Licenses::getAll
      */
-    public function testGetAll()
+    public function testShouldReturnNullWhenGetAllNonExistingLicense(): void
     {
         $license_keys = ['abc', 'def', 'ghi'];
 
-        /**
-         * Case: if licenses do not exist
-         */
         /* @var Collection|null $output */
         $output = $this->license->get($license_keys);
 
         $this->assertEquals(null, $output);
+    }
 
-        /**
-         * Case: If licenses exist
-         */
+    /**
+     * @cover \App\Repositories\Licenses::getAll
+     */
+    public function testShouldReturnCollectionObjectWhenGetAllLicense(): void
+    {
+        $license_keys = ['abc', 'def', 'ghi'];
+
         License::store($license_keys[0], [$license_keys[0]]);
         License::store($license_keys[1], [$license_keys[1]]);
         License::store($license_keys[2], [$license_keys[2]]);
@@ -92,36 +93,6 @@ class TestLicenses extends TestCase
             $this->assertContains($item->license, $license_keys);
             $this->assertEquals($item->data, [$item->license]);
         }
-    }
-
-    /**
-     * @covers \App\Repositories\Licenses::delete
-     * @throws \Exception
-     */
-    public function testDelete()
-    {
-        $license_key = 'abc';
-
-        /**
-         * Case: if license does not exist
-         */
-        /* @var License|null $output */
-        $output = $this->license->delete($license_key);
-
-        $this->assertIsInt($output);
-        $this->assertEquals(0, $output);
-        $this->notSeeInDatabase('licenses', array( 'license' => 'abc'));
-
-        /**
-         * Case: If license exist
-         */
-        $license = License::store($license_key, ['dummy data']);
-
-        $output = $this->license->delete($license_key);
-
-        $this->assertIsInt($output);
-        $this->assertEquals($license->id, $output);
-        $this->notSeeInDatabase('licenses', array( 'license' => 'abc'));
     }
 
     /**
