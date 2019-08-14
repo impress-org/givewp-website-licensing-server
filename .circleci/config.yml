@@ -154,9 +154,9 @@ jobs:
           db-password:             STAGING_DB_PASSWORD
           db-connection-name:      STAGING_DB_CONNECTION_NAME
           givewp-license-endpoint: http://staging.givewp.com/edd-sl-api
-          givewp-user:             GIVEWP_USER
-          givewp-passkey:          GIVE_PASSKEY
-          jwt-token:               JWT_TOKEN
+          givewp-user:             STAGING_GIVEWP_USER
+          givewp-passkey:          STAGING_GIVEWP_PASSKEY
+          jwt-token:               STAGING_JWT_TOKEN
 
       - setup-and-deploy-app-engine:
           gcloud-service-key:  STAGING_GCP_SERVICE_KEY
@@ -180,9 +180,9 @@ jobs:
           db-password:             PROD_DB_PASSWORD
           db-connection-name:      PROD_DB_CONNECTION_NAME
           givewp-license-endpoint: https://givewp.com/edd-sl-api
-          givewp-user:             GIVEWP_USER
-          givewp-passkey:          GIVE_PASSKEY
-          jwt-token:               JWT_TOKEN
+          givewp-user:             PROD_GIVEWP_USER
+          givewp-passkey:          PROD_GIVEWP_PASSKEY
+          jwt-token:               PROD_JWT_TOKEN
 
       - setup-and-deploy-app-engine:
           gcloud-service-key:  PROD_GCP_SERVICE_KEY
