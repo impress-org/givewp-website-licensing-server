@@ -69,7 +69,7 @@ commands:
                    GIVEWP_LICENSE_ENDPOINT,<< parameters.givewp-license-endpoint >>
                    GIVEWP_USER,${<< parameters.givewp-user >>}
                    GIVEWP_PASSKEY,${<< parameters.givewp-passkey >>}
-                   JWT_SECRET,${<< parameters.jwt-token >>}
+                   JWT_SECRET,${<< parameters.jwt-secret >>}
 
   setup-and-deploy-app-engine:
     description: "Installs and initializes gcloud, then deploys"
@@ -156,7 +156,7 @@ jobs:
           givewp-license-endpoint: http://staging.givewp.com/edd-sl-api
           givewp-user:             STAGING_GIVEWP_USER
           givewp-passkey:          STAGING_GIVEWP_PASSKEY
-          jwt-token:               STAGING_JWT_TOKEN
+          jwt-secret:              STAGING_JWT_TOKEN
 
       - setup-and-deploy-app-engine:
           gcloud-service-key:  STAGING_GCP_SERVICE_KEY
@@ -182,7 +182,7 @@ jobs:
           givewp-license-endpoint: https://givewp.com/edd-sl-api
           givewp-user:             PROD_GIVEWP_USER
           givewp-passkey:          PROD_GIVEWP_PASSKEY
-          jwt-token:               PROD_JWT_TOKEN
+          jwt-secret:              PROD_JWT_TOKEN
 
       - setup-and-deploy-app-engine:
           gcloud-service-key:  PROD_GCP_SERVICE_KEY
