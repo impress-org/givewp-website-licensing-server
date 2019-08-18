@@ -13,7 +13,7 @@ use Laravel\Lumen\Routing\Controller as BaseController;
  * Class StoreDataController
  * @package App\Http\Controllers
  */
-class StoreDataController extends BaseController
+class UpdateDataController extends BaseController
 {
     /**
      * The request instance.
