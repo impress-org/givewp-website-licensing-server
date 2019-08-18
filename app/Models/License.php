@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Builder;
+use function App\Helpers\getLicenseIdentifier;
 
 /**
  * App/Models/License
@@ -19,7 +20,7 @@ class License extends Model
      *
      * @var array
      */
-    protected $fillable = ['data', 'license'];
+    protected $fillable = ['data', 'key'];
 
     /**
      * The attributes that should be cast to native types.
@@ -38,8 +39,9 @@ class License extends Model
      */
     public static function store(string $license_key, array $data): License
     {
+        $key = getLicenseIdentifier($license_key);
         return self::updateOrCreate(
-            ['license' => $license_key],
+            ['key' => $key],
             ['data' => $data]
         );
     }

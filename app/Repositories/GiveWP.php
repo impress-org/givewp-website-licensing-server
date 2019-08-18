@@ -8,6 +8,7 @@ use App\Models\Subscription;
 use GuzzleHttp\Client as Client;
 use GuzzleHttp\Exception\GuzzleException;
 use Illuminate\Http\Request;
+use function App\Helpers\getClientWebsiteURLFromUserAgent;
 
 /**
  * Class Licenses
@@ -43,11 +44,9 @@ class GiveWP
             unset($query_param['license']);
         }
 
-        // Url must be set before sending query to GiveWP otherwise a;; url will set to this proxy server.
+        // Url must be set before sending query to GiveWP otherwise site url will set to this proxy server.
         if (! $request->filled('url')) {
-            // Attempt to grab the URL from the user agent if no URL is specified
-            $domain             = array_map('trim', explode(';', $_SERVER['HTTP_USER_AGENT']));
-            $query_param['url'] = ! empty($domain[1]) ? trim($domain[1]) : '';
+            $query_param['url'] = getClientWebsiteURLFromUserAgent();
         }
 
         // Make request to GiveWP.com
@@ -58,16 +57,17 @@ class GiveWP
                 'form_params' => $query_param,
                 'timeout'     => 30,
                 'headers'     => [
-                    'User-Agent' => env('APP_URL') . '/' . config('app.version')
-                ]
+                    'User-Agent' => env('APP_URL').'/'.config('app.version'),
+                ],
             )
         );
 
         $response = json_decode($response->getBody(), true);
 
         $this->saveResult(
-            $response,
-            $request->input('edd_action')
+            $request->input('edd_action'),
+            $query_param['url'],
+            $response
         );
 
         return $response;
@@ -76,10 +76,12 @@ class GiveWP
     /**
      * Save GiveWP result into database
      *
-     * @param  array  $dataFromGiveWP
      * @param  string  $type
+     * @param  string  $website_url
+     * @param  array  $dataFromGiveWP
+     *
      */
-    private function saveResult($dataFromGiveWP, $type): void
+    private function saveResult($type, $website_url, $dataFromGiveWP): void
     {
         switch ($type) {
             case 'get_version':

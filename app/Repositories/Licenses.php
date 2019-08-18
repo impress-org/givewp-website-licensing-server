@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\License;
 use Exception;
 use Illuminate\Support\Collection;
+use function App\Helpers\getLicenseIdentifier;
 
 /**
  * Class Licenses
@@ -20,25 +21,30 @@ class Licenses
     /**
      * Returns the license for the given key
      *
-     * @param  string|array  $license_key  License key.
+     * @param  string  $license_key  License key.
      *
      * @return License|null
      */
     public function get($license_key): ?License
     {
-        return License::where('license', $license_key)->first();
+        $key = getLicenseIdentifier($license_key);
+        return License::where('key', $key)->first();
     }
 
     /**
      * Returns the licenses for the given keys
      *
-     * @param $license_keys
+     * @param array $license_keys
      *
      * @return Collection|null
      */
     public function getAll(array $license_keys): ?Collection
     {
-        return License::whereIn('license', $license_keys)->get();
+        $keys = [];
+        foreach ($license_keys as $license_key) {
+            $keys[] = getLicenseIdentifier($license_key);
+        }
+        return License::whereIn('key', $keys)->get();
     }
 
     /**
@@ -51,7 +57,8 @@ class Licenses
      */
     public function delete(string $license_key)
     {
-        return License::where('license', $license_key)->delete();
+        $key = getLicenseIdentifier($license_key);
+        return License::where('key', $key)->delete();
     }
 
     /**
