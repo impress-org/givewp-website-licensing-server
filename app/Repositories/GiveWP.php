@@ -66,7 +66,6 @@ class GiveWP
 
         $this->saveResult(
             $request->input('edd_action'),
-            $query_param['url'],
             $response
         );
 
@@ -77,11 +76,9 @@ class GiveWP
      * Save GiveWP result into database
      *
      * @param  string  $type
-     * @param  string  $website_url
-     * @param  array  $dataFromGiveWP
-     *
+     * @param $dataFromGiveWP
      */
-    private function saveResult($type, $website_url, $dataFromGiveWP): void
+    private function saveResult($type, $dataFromGiveWP): void
     {
         switch ($type) {
             case 'get_version':
