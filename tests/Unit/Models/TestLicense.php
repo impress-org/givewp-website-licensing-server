@@ -25,29 +25,18 @@ class TestLicense extends TestCase
     }
 
     /**
-     * @covers \App\Models\License::store
+     *  @covers \App\Models\License::store
      */
-    public function testStore()
+    public function testReturnLicenseModelWhenStore(): void
     {
         $license_key = 'abc';
-
-        /**
-         * Case: if license does not exist
-         */
-        /* @var License|null $output */
-        $output = $this->license->get($license_key);
-
-        $this->assertEquals(null, $output);
-
-        /**
-         * Case: If license exist
-         */
-        License::store($license_key, ['dummy data']);
+        $data = [ 'license_key' => $license_key ];
+        License::store($license_key, $data);
 
         $output = $this->license->get($license_key);
 
         $this->assertInstanceOf(License::class, $output);
-        $this->assertEquals($license_key, $output->license);
-        $this->assertEquals(['dummy data'], $output->data);
+        $this->assertEquals($license_key, $output->data['license_key']);
+        $this->assertEquals($data, $output->data);
     }
 }
