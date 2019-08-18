@@ -26,9 +26,9 @@ $router->group(
         'prefix'     => 'update',
     ),
     function () use ($router) {
-        $router->post('license', 'StoreDataController@handle');
-        $router->post('subscription', 'StoreDataController@handle');
-        $router->post('addon', 'StoreDataController@handle');
+        $router->post('license', 'UpdateDataController@handle');
+        $router->post('subscription', 'UpdateDataController@handle');
+        $router->post('addon', 'UpdateDataController@handle');
     }
 );
 
