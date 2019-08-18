@@ -113,7 +113,7 @@ class TestLicenses extends TestCase
     public function testShouldGetOneWhenDeleteLicense(): void
     {
         $license_key = 'abc';
-        $license = License::store($license_key, ['dummy data']);
+        $license = License::store($license_key, [ 'license_key' => $license_key ]);
         $result = app(Licenses::class)->delete('abc');
 
         $key = getLicenseIdentifier($license_key);
