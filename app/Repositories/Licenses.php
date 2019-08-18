@@ -57,8 +57,11 @@ class Licenses
      */
     public function delete(string $license_key)
     {
-        $key = getLicenseIdentifier($license_key);
-        return License::where('key', $key)->delete();
+        return License::where(
+            'data',
+            'like',
+            "%$license_key%"
+        )->delete();
     }
 
     /**
