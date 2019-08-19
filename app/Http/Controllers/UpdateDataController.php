@@ -88,7 +88,8 @@ class UpdateDataController extends BaseController
             return false;
         }
 
-        app(Licenses::class)->delete(trim($this->request->input('license')));
+        $license = array_map('trim', explode(',', $this->request->input('license')));
+        app(Licenses::class)->delete($license);
 
         return true;
     }

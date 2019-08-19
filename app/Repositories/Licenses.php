@@ -57,11 +57,20 @@ class Licenses
      */
     public function delete(string $license_key)
     {
-        return License::where(
-            'data',
-            'like',
-            "%$license_key%"
-        )->delete();
+        return License::where('license', $license_key)->delete();
+    }
+
+    /**
+     * Delete all stored license data.
+     *
+     * @param  array $license_keys
+     *
+     * @return bool|mixed|null
+     * @throws Exception
+     */
+    public function deleteAll(array $license_keys)
+    {
+        return License::whereIn('license', $license_keys)->delete();
     }
 
     /**
