@@ -97,6 +97,7 @@ class GiveWP
             case 'check_license':
             case 'check_licenses':
                 foreach ($dataFromGiveWP as $license_key => $data) {
+                    // Preserve license data.
                     if (! empty($data['check_license']) && ! empty($data['check_license']['license_key'])) {
                         License::store($license_key, $data);
                     }
@@ -109,6 +110,11 @@ class GiveWP
                                 Addon::store($addon['name'], $addon);
                             }
                         }
+                    }
+
+                    // Preserve unlicensed add-on data.
+                    if (! empty($data['new_version'])) {
+                        Addon::store($data['name'], $data);
                     }
                 }
                 break;

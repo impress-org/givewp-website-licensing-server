@@ -67,7 +67,17 @@ class LicenseController extends BaseController
                 break;
 
             case 'check_licenses':
-                $this->validate($this->request, ['licenses' => 'required|string']);
+                // We need minimum one param to process request.
+                if (! $this->request->filled('licenses') && ! $this->request->filled('unlicensed')) {
+                    return \response()->json(array(
+                        'licenses' => [
+                            'validation.required'
+                        ],
+                        'unlicensed' => [
+                            'validation.required'
+                        ]
+                    ), 422);
+                }
 
                 $response = $this->handleCheckLicenses();
                 break;
@@ -98,23 +108,42 @@ class LicenseController extends BaseController
     {
         $response       = array();
         $license_keys   = array_map('trim', explode(',', $this->request->input('licenses')));
-        $licensesFromDB = app(Licenses::class)->getAll($license_keys);
+        $unlicensed     = array_map('trim', explode(',', $this->request->input('unlicensed')));
 
+        if (! empty($license_keys)) {
+            foreach ($license_keys as $key => $license_key) {
+                $licenseFromDB = app(Licenses::class)->get($license_key);
 
-        /*
-         * A result set will be count as successful on if:
-         *  1. result from database is not empty
-         *  2. license count is same
-         */
-        if ($licensesFromDB instanceof Collection
-            && $licensesFromDB->isNotEmpty()
-            && count($licensesFromDB) === count($license_keys)
-        ) {
-            foreach ($licensesFromDB as $license) {
-                $response[$license->license] = $license->data;
+                if ($licenseFromDB instanceof License) {
+                    $response[$license_key] = $licenseFromDB->data;
+                    unset($license_keys[$key]);
+                }
             }
-        } else {
-            $response = app(GiveWP::class)->get($this->request);
+        }
+
+        if (! empty($unlicensed)) {
+            foreach ($unlicensed as $key => $addon_name) {
+                $addon = app(Addons::class)->get($addon_name);
+
+                if ($addon instanceof Addon) {
+                    $response[$addon_name] = $addon->data;
+                    unset($unlicensed[$key]);
+                }
+            }
+        }
+
+        // Remove empty values.
+        $license_keys = array_filter($license_keys);
+        $unlicensed = array_filter($unlicensed);
+
+        // Fetch remain results from GiveWP
+        if (! empty($license_keys) || ! empty($unlicensed)) {
+            $this->request->offsetSet('licenses', implode(',', $license_keys));
+            $this->request->offsetSet('unlicensed', implode(',', $unlicensed));
+
+            $temp_response = app(GiveWP::class)->get($this->request);
+
+            $response = array_merge($response, $temp_response);
         }
 
         return $response;
