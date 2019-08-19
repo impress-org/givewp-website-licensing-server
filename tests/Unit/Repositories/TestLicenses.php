@@ -8,6 +8,7 @@ use Illuminate\Database\Eloquent\Collection;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
 use function App\Helpers\getLicenseIdentifier;
+use function Tests\Helpers\getLicenseData;
 
 class TestLicenses extends TestCase
 {
@@ -50,15 +51,14 @@ class TestLicenses extends TestCase
      */
     public function testShouldReturnLicenseModelWhenGetNonExistingLicense(): void
     {
-        $license_key = 'abc';
-        $data = [ 'license_key' => $license_key ];
-        License::store($license_key, $data);
+        $license_data = getLicenseData(['license_key' => 'abc']);
+        License::store($license_data['license_key'], $license_data);
 
-        $output = $this->license->get($license_key);
+        $output = $this->license->get($license_data['license_key']);
 
         $this->assertInstanceOf(License::class, $output);
-        $this->assertEquals($license_key, $output->data['license_key']);
-        $this->assertEquals($data, $output->data);
+        $this->assertEquals($license_data['license_key'], $output->license);
+        $this->assertEquals($license_data, $output->data);
     }
 
     /**
@@ -80,10 +80,15 @@ class TestLicenses extends TestCase
     public function testShouldReturnCollectionObjectWhenGetAllLicense(): void
     {
         $license_keys = ['abc', 'def', 'ghi'];
+        $license_datas = [
+            getLicenseData(['license_key' => $license_keys[0] ]),
+            getLicenseData(['license_key' => $license_keys[1] ]),
+            getLicenseData(['license_key' => $license_keys[2] ])
+        ];
 
-        License::store($license_keys[0], ['license_key' => $license_keys[0]]);
-        License::store($license_keys[1], ['license_key' => $license_keys[1]]);
-        License::store($license_keys[2], ['license_key' => $license_keys[2]]);
+        License::store($license_datas[0]['license_key'], $license_datas[0]);
+        License::store($license_datas[1]['license_key'], $license_datas[1]);
+        License::store($license_datas[2]['license_key'], $license_datas[2]);
 
 
         $output = $this->license->getAll($license_keys);
@@ -92,8 +97,9 @@ class TestLicenses extends TestCase
         $this->assertCount(count($license_keys), $output);
 
         foreach ($output as $item) {
-            $this->assertContains($item->data['license_key'], $license_keys);
-            $this->assertEquals($item->data, [ 'license_key' => $item->data['license_key']]);
+            $arrayIndex = array_search($item->license, $license_keys, true);
+            $this->assertContains($item->license, $license_keys);
+            $this->assertEquals($item->data, $license_datas[$arrayIndex]);
         }
     }
 
@@ -112,11 +118,11 @@ class TestLicenses extends TestCase
      */
     public function testShouldGetOneWhenDeleteLicense(): void
     {
-        $license_key = 'abc';
-        $license = License::store($license_key, [ 'license_key' => $license_key ]);
+        $license_data = getLicenseData(['license_key' => 'abc' ]);
+        $license = License::store($license_data['license_key'], $license_data);
         $result = app(Licenses::class)->delete('abc');
 
-        $key = getLicenseIdentifier($license_key);
+        $key = getLicenseIdentifier($license_data['license_key']);
 
         $this->assertEquals($license->id, $result);
         $this->notSeeInDatabase('licenses', array( 'key' => $key ));
@@ -138,12 +144,11 @@ class TestLicenses extends TestCase
      */
     public function testShouldGetOneWhenDeleteLicenseByAddon(): void
     {
-        $license_key = 'abc';
-        $addon_name = 'xyx';
-        $license = License::store($license_key, ['get_version' => ['name'=>$addon_name] ]);
-        $result = app(Licenses::class)->deleteByAddon($addon_name);
+        $license_data = getLicenseData(['license_key' => 'abc', 'item_name' => 'xyz']);
+        $license = License::store($license_data['license_key'], $license_data);
+        $result = app(Licenses::class)->deleteByAddon($license_data['item_name']);
 
-        $key = getLicenseIdentifier($license_key);
+        $key = getLicenseIdentifier($license_data['license_key']);
 
         $this->assertEquals($license->id, $result);
         $this->notSeeInDatabase('licenses', array( 'key' => $key ));

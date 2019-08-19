@@ -6,6 +6,7 @@ use App\Models\License;
 use App\Repositories\Licenses;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
+use function Tests\Helpers\getLicenseData;
 
 class TestLicense extends TestCase
 {
@@ -29,14 +30,13 @@ class TestLicense extends TestCase
      */
     public function testReturnLicenseModelWhenStore(): void
     {
-        $license_key = 'abc';
-        $data = [ 'license_key' => $license_key ];
-        License::store($license_key, $data);
+        $license_data = getLicenseData(['license_key'=> 'abc']);
+        License::store($license_data['license_key'], $license_data);
 
-        $output = $this->license->get($license_key);
+        $output = $this->license->get($license_data['license_key']);
 
         $this->assertInstanceOf(License::class, $output);
-        $this->assertEquals($license_key, $output->data['license_key']);
-        $this->assertEquals($data, $output->data);
+        $this->assertEquals($license_data['license_key'], $output->data['license_key']);
+        $this->assertEquals($license_data, $output->data);
     }
 }
