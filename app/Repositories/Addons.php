@@ -32,11 +32,7 @@ class Addons
             return $addons;
         }
 
-        return Addon::where(
-            'addon',
-            'like',
-            '%' . strtolower($addon) . '%'
-        )->first();
+        return Addon::where('addon', strtolower($addon))->first();
     }
 
     /**
@@ -49,10 +45,6 @@ class Addons
      */
     public function delete($addon)
     {
-        return Addon::where(
-            'addon',
-            'like',
-            '%' . strtolower($addon) . '%'
-        )->delete();
+        return Addon::where('addon', strtolower($addon))->delete();
     }
 }
