@@ -216,6 +216,3 @@ class LicenseController extends BaseController
         return $response;
     }
 }
-
-// @todo: check if we are setting correct url for GiveWP request.
-// @todo: check if license expired or not before sending license result.
