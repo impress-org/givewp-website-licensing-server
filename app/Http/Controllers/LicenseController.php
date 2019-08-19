@@ -106,8 +106,7 @@ class LicenseController extends BaseController
          *  1. result from database is not empty
          *  2. license count is same
          */
-        if (
-            $licensesFromDB instanceOf Collection
+        if ($licensesFromDB instanceof Collection
             && $licensesFromDB->isNotEmpty()
             && count($licensesFromDB) === count($license_keys)
         ) {
@@ -188,6 +187,3 @@ class LicenseController extends BaseController
         return $response;
     }
 }
-
-// @todo: check if we are setting correct url for GiveWP request.
-// @todo: check if license expired or not before sending license result.
