@@ -27,10 +27,13 @@ if (! function_exists('getClientWebsiteURLFromUserAgent')) {
      */
     function getClientWebsiteURLFromUserAgent()
     {
-        $domain = isset($_SERVER['HTTP_USER_AGENT']) ?
-            array_map('trim', explode(';', $_SERVER['HTTP_USER_AGENT']))
-            : '';
-        $domain = ! empty($domain[1]) ? trim($domain[1]) : '';
+        $domain = filter_var(app('request')->input('url'), FILTER_VALIDATE_URL);
+        if (! $domain) {
+            $domain = isset($_SERVER['HTTP_USER_AGENT']) ?
+                array_map('trim', explode(';', $_SERVER['HTTP_USER_AGENT']))
+                : '';
+            $domain = ! empty($domain[1]) ? trim($domain[1]) : '';
+        }
 
         return $domain;
     }
