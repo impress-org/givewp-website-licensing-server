@@ -28,7 +28,10 @@ class Licenses
     public function get($license_key): ?License
     {
         $key = getLicenseIdentifier($license_key);
-        return License::where('key', $key)->first();
+        $license = License::where('key', $key)->first();
+        $license = $this->setExpiredStatus($license);
+
+        return $license;
     }
 
     /**
@@ -44,7 +47,16 @@ class Licenses
         foreach ($license_keys as $license_key) {
             $keys[] = getLicenseIdentifier($license_key);
         }
-        return License::whereIn('key', $keys)->get();
+
+        $licenses = License::whereIn('key', $keys)->get();
+
+        if ($licenses->isNotEmpty()) {
+            foreach ($licenses as $key => $license) {
+                $licenses[$key] = $this->setExpiredStatus($license);
+            }
+        }
+
+        return $licenses;
     }
 
     /**
@@ -84,5 +96,32 @@ class Licenses
     public function deleteByAddon($addon)
     {
         return License::where('addon', strtolower($addon))->delete();
+    }
+
+    /**
+     * Verify and set expired status of license
+     *
+     * @param $license
+     *
+     * @return License|Collection|null
+     */
+    private function setExpiredStatus($license)
+    {
+        if (! $license) {
+            return $license;
+        }
+
+        // Check if license expires or not.
+        if ($license
+            && $license->data['license'] !== 'expired'
+            && strtotime($license->data['expires']) <= time()
+        ) {
+            $tmp = $license->data;
+            $tmp['license'] = 'expired';
+
+            $license->data = $tmp;
+        }
+
+        return $license;
     }
 }
