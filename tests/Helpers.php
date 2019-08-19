@@ -18,7 +18,7 @@ if (! function_exists('getLicenseData')) {
             'item_id'            => false,
             'item_name'          => 'Form Field Manager',
             'checksum'           => '6ecb1f8025cf50e6d42bb0f3c484e2f2',
-            'expires'            => '2019-02-25 23:59:59',
+            'expires'            => date('Y-m-d H:i:s', strtotime('+1 year')),
             'payment_id'         => 49577,
             'customer_name'      => 'GiveWP',
             'customer_email'     => 'givewp@test.com',
