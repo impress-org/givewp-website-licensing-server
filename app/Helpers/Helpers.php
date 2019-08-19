@@ -2,8 +2,6 @@
 
 namespace App\Helpers;
 
-use Illuminate\Http\Request;
-
 if (! function_exists('getLicenseIdentifier')) {
     /**
      * Get unique identifier to identify license in licenses table
