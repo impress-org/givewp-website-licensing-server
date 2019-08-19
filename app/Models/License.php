@@ -45,7 +45,7 @@ class License extends Model
             [
                 'data' => $data,
                 'license' => $license_key,
-                'addon' => strtolower($data['item_name'])
+                'addon' => strtolower($data['check_license']['item_name'])
             ]
         );
     }

@@ -36,6 +36,7 @@ if (! function_exists('getLicenseData')) {
         ];
 
         $license_data = array_merge($default_license_data, $license_data);
+        $license_data = ['check_license' => $license_data];
 
         return $license_data;
     }
