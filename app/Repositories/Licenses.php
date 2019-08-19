@@ -113,11 +113,12 @@ class Licenses
 
         // Check if license expires or not.
         if ($license
-            && $license->data['license'] !== 'expired'
-            && strtotime($license->data['expires']) <= time()
+            && $license->data['check_license']['license'] !== 'expired'
+            && $license->data['check_license']['expires'] !== 'lifetime'
+            && strtotime($license->data['check_license']['expires']) <= time()
         ) {
             $tmp = $license->data;
-            $tmp['license'] = 'expired';
+            $tmp['check_license']['license'] = 'expired';
 
             $license->data = $tmp;
         }
