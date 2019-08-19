@@ -20,6 +20,8 @@ class CreateLicensesTable extends Migration
             $table->string('addon', 150);
             $table->longText('data');
             $table->timestamps();
+
+            $table->index('addon');
         });
     }
 
