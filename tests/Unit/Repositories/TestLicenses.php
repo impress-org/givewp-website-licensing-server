@@ -59,6 +59,7 @@ class TestLicenses extends TestCase
         $this->assertInstanceOf(License::class, $output);
         $this->assertEquals($license_data['license_key'], $output->license);
         $this->assertEquals($license_data, $output->data);
+        $this->assertEquals('valid', $output->data['license']);
     }
 
     /**
@@ -188,5 +189,41 @@ class TestLicenses extends TestCase
         $this->notSeeInDatabase('licenses', array( 'key' => $abc_key ));
         $this->notSeeInDatabase('licenses', array( 'key' => $def_key ));
         $this->notSeeInDatabase('licenses', array( 'key' => $ghi_key ));
+    }
+
+    /**
+     * @cover \App\Repositories\Licenses::get
+     */
+    public function testShouldReturnLicenseModelWithExpiredStatusWhenGetSingleLicense(): void
+    {
+        $license_data = getLicenseData(['license_key' => 'abc', 'expires' => strtotime('-2 year')]);
+        License::store($license_data['license_key'], $license_data);
+
+        $output = $this->license->get($license_data['license_key']);
+
+        $this->assertEquals('expired', $output->data['license']);
+    }
+
+    /**
+     * @cover \App\Repositories\Licenses::getAll
+     */
+    public function testShouldReturnLicenseModelWithExpiredStatusWhenGetMultipleLicenses(): void
+    {
+        $abc_license_data = getLicenseData(['license_key' => 'abc' ]);
+        $def_license_data = getLicenseData(['license_key' => 'def', 'expires' => strtotime('-2 year') ]);
+        $ghi_license_data = getLicenseData(['license_key' => 'ghi', 'expires' => strtotime('-2 year') ]);
+
+        License::store($abc_license_data['license_key'], $abc_license_data);
+        License::store($def_license_data['license_key'], $def_license_data);
+        License::store($ghi_license_data['license_key'], $ghi_license_data);
+
+        $abc_output = $this->license->get($abc_license_data['license_key']);
+        $def_output = $this->license->get($def_license_data['license_key']);
+        $ghi_output = $this->license->get($ghi_license_data['license_key']);
+
+
+        $this->assertEquals('valid', $abc_output->data['license']);
+        $this->assertEquals('expired', $def_output->data['license']);
+        $this->assertEquals('expired', $ghi_output->data['license']);
     }
 }
