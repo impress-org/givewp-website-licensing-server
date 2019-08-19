@@ -67,7 +67,17 @@ class LicenseController extends BaseController
                 break;
 
             case 'check_licenses':
-                $this->validate($this->request, ['licenses' => 'required|string']);
+                // We need minimum one param to process request.
+                if (! $this->request->filled('licenses') && ! $this->request->filled('unlicensed')) {
+                    return \response()->json(array(
+                        'licenses' => [
+                            'validation.required'
+                        ],
+                        'unlicensed' => [
+                            'validation.required'
+                        ]
+                    ), 422);
+                }
 
                 $response = $this->handleCheckLicenses();
                 break;
