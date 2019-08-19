@@ -20,7 +20,7 @@ class License extends Model
      *
      * @var array
      */
-    protected $fillable = ['data', 'key'];
+    protected $fillable = ['data', 'key', 'license'];
 
     /**
      * The attributes that should be cast to native types.
@@ -42,7 +42,7 @@ class License extends Model
         $key = getLicenseIdentifier($license_key);
         return self::updateOrCreate(
             ['key' => $key],
-            ['data' => $data]
+            ['data' => $data, 'license' => $license_key ]
         );
     }
 }
