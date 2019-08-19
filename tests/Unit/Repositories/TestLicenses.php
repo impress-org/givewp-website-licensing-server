@@ -7,6 +7,8 @@ use App\Repositories\Licenses;
 use Illuminate\Database\Eloquent\Collection;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
+use function App\Helpers\getLicenseIdentifier;
+use function Tests\Helpers\getLicenseData;
 
 class TestLicenses extends TestCase
 {
@@ -49,27 +51,27 @@ class TestLicenses extends TestCase
      */
     public function testShouldReturnLicenseModelWhenGetNonExistingLicense(): void
     {
-        $license_key = 'abc';
-        License::store($license_key, ['dummy data']);
+        $license_data = getLicenseData(['license_key' => 'abc']);
+        License::store($license_data['check_license']['license_key'], $license_data);
 
-        $output = $this->license->get($license_key);
+        $output = $this->license->get($license_data['check_license']['license_key']);
 
         $this->assertInstanceOf(License::class, $output);
-        $this->assertEquals($license_key, $output->license);
-        $this->assertEquals(['dummy data'], $output->data);
+        $this->assertEquals($license_data['check_license']['license_key'], $output->license);
+        $this->assertEquals($license_data, $output->data);
     }
 
     /**
      * @cover \App\Repositories\Licenses::getAll
      */
-    public function testShouldReturnNullWhenGetAllNonExistingLicense(): void
+    public function testShouldReturnEmptyCollectionWhenGetAllNonExistingLicense(): void
     {
         $license_keys = ['abc', 'def', 'ghi'];
 
         /* @var Collection|null $output */
-        $output = $this->license->get($license_keys);
+        $output = $this->license->getAll($license_keys);
 
-        $this->assertEquals(null, $output);
+        $this->assertTrue($output->isEmpty());
     }
 
     /**
@@ -78,10 +80,15 @@ class TestLicenses extends TestCase
     public function testShouldReturnCollectionObjectWhenGetAllLicense(): void
     {
         $license_keys = ['abc', 'def', 'ghi'];
+        $license_datas = [
+            getLicenseData(['license_key' => $license_keys[0] ]),
+            getLicenseData(['license_key' => $license_keys[1] ]),
+            getLicenseData(['license_key' => $license_keys[2] ])
+        ];
 
-        License::store($license_keys[0], [$license_keys[0]]);
-        License::store($license_keys[1], [$license_keys[1]]);
-        License::store($license_keys[2], [$license_keys[2]]);
+        License::store($license_datas[0]['check_license']['license_key'], $license_datas[0]);
+        License::store($license_datas[1]['check_license']['license_key'], $license_datas[1]);
+        License::store($license_datas[2]['check_license']['license_key'], $license_datas[2]);
 
 
         $output = $this->license->getAll($license_keys);
@@ -90,8 +97,9 @@ class TestLicenses extends TestCase
         $this->assertCount(count($license_keys), $output);
 
         foreach ($output as $item) {
+            $arrayIndex = array_search($item->license, $license_keys, true);
             $this->assertContains($item->license, $license_keys);
-            $this->assertEquals($item->data, [$item->license]);
+            $this->assertEquals($item->data, $license_datas[$arrayIndex]);
         }
     }
 
@@ -103,7 +111,6 @@ class TestLicenses extends TestCase
         $result = app(Licenses::class)->delete('abc');
 
         $this->assertEquals(0, $result);
-        $this->notSeeInDatabase('licenses', array( 'license' => 'abc'));
     }
 
     /**
@@ -111,11 +118,14 @@ class TestLicenses extends TestCase
      */
     public function testShouldGetOneWhenDeleteLicense(): void
     {
-        $license = License::store('abc', ['dummy data']);
+        $license_data = getLicenseData(['license_key' => 'abc' ]);
+        $license = License::store($license_data['check_license']['license_key'], $license_data);
         $result = app(Licenses::class)->delete('abc');
 
+        $key = getLicenseIdentifier($license_data['check_license']['license_key']);
+
         $this->assertEquals($license->id, $result);
-        $this->notSeeInDatabase('licenses', array( 'license' => 'abc'));
+        $this->notSeeInDatabase('licenses', array( 'key' => $key ));
     }
 
     /**
@@ -123,10 +133,10 @@ class TestLicenses extends TestCase
      */
     public function testShouldGetZeroWhenDeleteNonExistingLicenseByAddon(): void
     {
-        $result = app(Licenses::class)->deleteByAddon('xyz');
+        $addon_name = 'xyz';
+        $result = app(Licenses::class)->deleteByAddon($addon_name);
 
         $this->assertEquals(0, $result);
-        $this->notSeeInDatabase('licenses', array( 'license' => 'xyz'));
     }
 
     /**
@@ -134,10 +144,49 @@ class TestLicenses extends TestCase
      */
     public function testShouldGetOneWhenDeleteLicenseByAddon(): void
     {
-        $license = License::store('abc', ['get_version' => ['name'=>'xyx'] ]);
-        $result = app(Licenses::class)->delete('abc');
+        $license_data = getLicenseData(['license_key' => 'abc', 'item_name' => 'xyz']);
+        $license = License::store($license_data['check_license']['license_key'], $license_data);
+        $result = app(Licenses::class)->deleteByAddon($license_data['check_license']['item_name']);
+
+        $key = getLicenseIdentifier($license_data['check_license']['license_key']);
 
         $this->assertEquals($license->id, $result);
-        $this->notSeeInDatabase('licenses', array( 'license' => 'abc'));
+        $this->notSeeInDatabase('licenses', array( 'key' => $key ));
+    }
+
+    /**
+     * @covers \App\Repositories\Licenses::deleteAll
+     */
+    public function testShouldGetZeroWhenDeleteNonExistingMultipleLicenses(): void
+    {
+        $result = app(Licenses::class)->deleteAll(['abc', 'def', 'ghi']);
+
+        $this->assertEquals(0, $result);
+    }
+
+    /**
+     * @covers \App\Repositories\Licenses::deleteAll
+     */
+    public function testShouldGetOneWhenDeleteMultipleLicenses(): void
+    {
+        $abc_license_data = getLicenseData(['license_key' => 'abc' ]);
+        $def_license_data = getLicenseData(['license_key' => 'def' ]);
+        $ghi_license_data = getLicenseData(['license_key' => 'ghi' ]);
+
+        $abc_license = License::store($abc_license_data['check_license']['license_key'], $abc_license_data);
+        $def_license = License::store($def_license_data['check_license']['license_key'], $def_license_data);
+        $ghi_license = License::store($ghi_license_data['check_license']['license_key'], $ghi_license_data);
+
+        $result = app(Licenses::class)->deleteAll([$abc_license_data['check_license']['license_key'], $def_license_data['check_license']['license_key'], $ghi_license_data['check_license']['license_key']]);
+
+        $abc_key = getLicenseIdentifier($abc_license_data['check_license']['license_key']);
+        $def_key = getLicenseIdentifier($def_license_data['check_license']['license_key']);
+        $ghi_key = getLicenseIdentifier($ghi_license_data['check_license']['license_key']);
+
+        $this->assertEquals(3, $result);
+
+        $this->notSeeInDatabase('licenses', array( 'key' => $abc_key ));
+        $this->notSeeInDatabase('licenses', array( 'key' => $def_key ));
+        $this->notSeeInDatabase('licenses', array( 'key' => $ghi_key ));
     }
 }

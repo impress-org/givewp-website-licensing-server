@@ -13,7 +13,7 @@ use Laravel\Lumen\Routing\Controller as BaseController;
  * Class StoreDataController
  * @package App\Http\Controllers
  */
-class StoreDataController extends BaseController
+class UpdateDataController extends BaseController
 {
     /**
      * The request instance.
@@ -88,7 +88,8 @@ class StoreDataController extends BaseController
             return false;
         }
 
-        app(Licenses::class)->delete(trim($this->request->input('license')));
+        $license = array_map('trim', explode(',', $this->request->input('license')));
+        app(Licenses::class)->deleteAll($license);
 
         return true;
     }

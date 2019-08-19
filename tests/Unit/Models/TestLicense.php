@@ -6,6 +6,8 @@ use App\Models\License;
 use App\Repositories\Licenses;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
+use function App\Helpers\getLicenseIdentifier;
+use function Tests\Helpers\getLicenseData;
 
 class TestLicense extends TestCase
 {
@@ -25,29 +27,19 @@ class TestLicense extends TestCase
     }
 
     /**
-     * @covers \App\Models\License::store
+     *  @covers \App\Models\License::store
      */
-    public function testStore()
+    public function testReturnLicenseModelWhenStore(): void
     {
-        $license_key = 'abc';
+        $license_data = getLicenseData(['license_key'=> 'abc']);
+        License::store($license_data['check_license']['license_key'], $license_data);
 
-        /**
-         * Case: if license does not exist
-         */
-        /* @var License|null $output */
-        $output = $this->license->get($license_key);
-
-        $this->assertEquals(null, $output);
-
-        /**
-         * Case: If license exist
-         */
-        License::store($license_key, ['dummy data']);
-
-        $output = $this->license->get($license_key);
+        $output = $this->license->get($license_data['check_license']['license_key']);
+        $key = getLicenseIdentifier($license_data['check_license']['license_key']);
 
         $this->assertInstanceOf(License::class, $output);
-        $this->assertEquals($license_key, $output->license);
-        $this->assertEquals(['dummy data'], $output->data);
+        $this->assertEquals($license_data['check_license']['license_key'], $output->data['check_license']['license_key']);
+        $this->assertEquals($license_data, $output->data);
+        $this->assertEquals($key, $output->key);
     }
 }
