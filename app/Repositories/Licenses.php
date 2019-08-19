@@ -50,7 +50,7 @@ class Licenses
     /**
      * Delete stored license data.
      *
-     * @param  string  $license_key
+     * @param  string  $license_key Number of row deleted
      *
      * @return bool|mixed|null
      * @throws Exception
@@ -65,7 +65,7 @@ class Licenses
      *
      * @param  array $license_keys
      *
-     * @return bool|mixed|null
+     * @return bool|mixed|null Number of row deleted
      * @throws Exception
      */
     public function deleteAll(array $license_keys)
