@@ -14,16 +14,6 @@ class TestAppUpdate extends TestCase
     use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
     use DatabaseMigrations;
 
-
-    /**
-     * @since 0.1.0
-     * @var array
-     */
-    protected $configsToStore = [
-        'app.version',
-        'app.upgrades'
-    ];
-
     /**
      * Sets up and runs the common unit test criteria.
      *
