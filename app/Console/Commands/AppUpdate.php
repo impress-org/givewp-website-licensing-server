@@ -4,7 +4,6 @@ namespace App\Console\Commands;
 
 use App\Contracts\Upgrades\VersionUpgrade;
 use App\Repositories\SystemOptions;
-use App\Upgrades\BaseUpgrade;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 
