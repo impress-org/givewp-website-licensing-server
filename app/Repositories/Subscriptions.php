@@ -48,4 +48,17 @@ class Subscriptions
     {
         return Subscription::where('license', $license_key)->delete();
     }
+
+    /**
+     * Delete stored subscription data.
+     *
+     * @param  int  $subscriptionID
+     *
+     * @return bool|mixed|null
+     * @throws Exception
+     */
+    public function deleteBySubscriptionID(int $subscriptionID)
+    {
+        return Subscription::where('subscription', $subscriptionID)->delete();
+    }
 }
