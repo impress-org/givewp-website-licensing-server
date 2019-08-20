@@ -103,7 +103,7 @@ class UpdateDataController extends BaseController
     {
         $this->validate($this->request, ['subscription' => 'required|string']);
 
-        app(Subscriptions::class)->delete((int) trim($this->request->input('subscription')));
+        app(Subscriptions::class)->deleteBySubscriptionID(trim($this->request->input('subscription')));
 
         return true;
     }
