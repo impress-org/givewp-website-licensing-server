@@ -3,6 +3,7 @@
 namespace App\Console;
 
 use App\Console\Commands\AppFresh;
+use App\Console\Commands\AppUpdate;
 use App\Console\Commands\AppVersion;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
@@ -16,7 +17,8 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         AppVersion::class,
-        AppFresh::class
+        AppFresh::class,
+        AppUpdate::class
     ];
 
     /**
