@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Repositories\SystemOptions;
 use Illuminate\Console\Command;
 
 class AppVersion extends Command
@@ -45,6 +46,7 @@ class AppVersion extends Command
             $this->output->write(config('app.version'));
         } else {
             $this->info('App Version: ' . config('app.version'));
+            $this->info('Database Version: ' . app(SystemOptions::class)->get('app_version'));
         }
     }
 }
