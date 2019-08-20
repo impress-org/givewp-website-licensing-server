@@ -44,6 +44,8 @@ $router->group(
 | All endpoints begin with /artisan/ prefixed
 */
 
+Route::get('/app/update', 'ArtisanController@update');
+
 if (! App::environment('production')) {
     // Dangerous endpoint, do not even add routes on production
     Route::get('/app/fresh', 'ArtisanController@fresh');
