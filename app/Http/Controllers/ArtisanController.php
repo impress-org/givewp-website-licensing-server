@@ -23,7 +23,7 @@ class ArtisanController extends Controller
      *
      * @return Response
      * @throws ValidationException
-     * @since 0.3.0
+     * @since 0.1.0
      *
      */
     public function fresh(Request $request): Response
@@ -46,5 +46,31 @@ class ArtisanController extends Controller
         }
 
         return \response($output);
+    }
+
+    /**
+     * Runs the app:update command to run any application upgrades
+     *
+     * @since 0.1.0
+     *
+     * @param Request $request
+     *
+     * @return Response
+     */
+    public function update(Request $request): Response
+    {
+        // Run the updater
+        Artisan::call('app:update');
+
+        if (config('app.debug')) {
+            $output = sprintf(
+                'Artisan output:<br>-------<br>%1$s',
+                nl2br(Artisan::output())
+            );
+        } else {
+            $output = 'Done';
+        }
+
+        return response($output);
     }
 }
