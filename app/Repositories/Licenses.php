@@ -95,7 +95,7 @@ class Licenses
      */
     public function deleteByAddon($addon)
     {
-        return License::where('addon', strtolower($addon))->delete();
+        return License::where('data', 'like', '%' . strtolower($addon) . '%')->delete();
     }
 
     /**

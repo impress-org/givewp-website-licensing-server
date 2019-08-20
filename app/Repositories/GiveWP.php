@@ -106,7 +106,7 @@ class GiveWP
                         Addon::store($data['get_version']['name'], $data['get_version']);
                     } elseif (! empty($data['get_versions'])) {
                         foreach ($data['get_versions'] as $addon) {
-                            if (! empty($addon['newer_version'])) {
+                            if (! empty($addon['new_version'])) {
                                 Addon::store($addon['name'], $addon);
                             }
                         }
