@@ -19,6 +19,8 @@ class CreateSubscriptionsTable extends Migration
             $table->string('subscription', 150 );
             $table->longText('data' );
             $table->timestamps();
+
+            $table->index('license');
         });
     }
 
