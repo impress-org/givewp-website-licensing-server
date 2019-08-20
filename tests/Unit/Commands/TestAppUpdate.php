@@ -9,6 +9,11 @@ use Laravel\Lumen\Testing\DatabaseMigrations;
 use Mockery;
 use Tests\TestCase;
 
+/**
+ * Class TestAppUpdate
+ * @package Tests\Unit\Commands
+ * @coversDefaultClass \App\Console\Commands\AppUpdate
+ */
 class TestAppUpdate extends TestCase
 {
     use Mockery\Adapter\Phpunit\MockeryPHPUnitIntegration;
