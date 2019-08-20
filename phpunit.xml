@@ -9,6 +9,9 @@
          processIsolation="false"
          stopOnFailure="false">
     <testsuites>
+        <testsuite name="Commands">
+            <directory suffix=".php">./tests/Unit/Commands</directory>
+        </testsuite>
         <testsuite name="Repositories">
             <directory suffix=".php">./tests/Unit/Repositories</directory>
         </testsuite>
