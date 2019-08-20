@@ -39,6 +39,7 @@ class UpdateDataController extends BaseController
      * Handle store data requests
      *
      * @return JsonResponse
+     * @throws ValidationException
      */
     public function handle()
     {
