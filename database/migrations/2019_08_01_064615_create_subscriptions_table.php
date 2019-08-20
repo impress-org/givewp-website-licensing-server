@@ -16,6 +16,7 @@ class CreateSubscriptionsTable extends Migration
         Schema::create('subscriptions', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->string('license', 150 )->unique();
+            $table->string('subscription', 150 );
             $table->longText('data' );
             $table->timestamps();
         });

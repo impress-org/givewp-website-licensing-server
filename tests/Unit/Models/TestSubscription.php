@@ -6,6 +6,7 @@ use App\Models\Subscription;
 use App\Repositories\Subscriptions;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
+use function Tests\Helpers\getSubscriptionData;
 
 class TestSubscription extends TestCase
 {
@@ -42,12 +43,14 @@ class TestSubscription extends TestCase
         /**
          * Case: If license exist
          */
-        Subscription::store($license_key, ['dummy data']);
+        $subscriptionData = getSubscriptionData(['id' => mt_rand(), 'license_key'=> 'abc' ]);
+
+        Subscription::store($subscriptionData['license_key'], $subscriptionData);
 
         $output = $this->license->get($license_key);
 
         $this->assertInstanceOf(Subscription::class, $output);
-        $this->assertEquals($license_key, $output->license);
-        $this->assertEquals(['dummy data'], $output->data);
+        $this->assertEquals($subscriptionData['license_key'], $output->license);
+        $this->assertEquals($subscriptionData, $output->data);
     }
 }

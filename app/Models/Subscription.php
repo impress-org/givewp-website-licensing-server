@@ -18,7 +18,7 @@ class Subscription extends Model
      *
      * @var array
      */
-    protected $fillable = ['data', 'license'];
+    protected $fillable = ['data', 'license', 'subscription'];
 
     /**
      * The attributes that should be cast to native types.
@@ -39,7 +39,10 @@ class Subscription extends Model
     {
         return self::updateOrCreate(
             ['license' => $license_key],
-            ['data' => $data]
+            [
+                'data' => $data,
+                'subscription' => $data['id']
+            ]
         );
     }
 }

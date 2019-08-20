@@ -6,6 +6,7 @@ use App\Models\Subscription;
 use Laravel\Lumen\Testing\DatabaseMigrations;
 use Tests\TestCase;
 use App\Repositories\Subscriptions;
+use function Tests\Helpers\getSubscriptionData;
 
 /**
  * Class TestSubscriptions
@@ -55,17 +56,15 @@ class TestSubscriptions extends TestCase
      */
     public function testShouldReturnSubscriptionModelWhenGetSubscription(): void
     {
-        $license_key = 'abc';
-        /**
-         * Case: If license exist
-         */
-        Subscription::store($license_key, ['dummy data']);
+        $subscriptionData = getSubscriptionData(['id' => mt_rand(), 'license_key'=> 'abc' ]);
 
-        $output = $this->subscription->get($license_key);
+        Subscription::store($subscriptionData['license_key'], $subscriptionData);
+
+        $output = $this->subscription->get($subscriptionData['license_key']);
 
         $this->assertInstanceOf(Subscription::class, $output);
-        $this->assertEquals($license_key, $output->license);
-        $this->assertEquals(['dummy data'], $output->data);
+        $this->assertEquals($subscriptionData['license_key'], $output->license);
+        $this->assertEquals($subscriptionData, $output->data);
     }
 
     /**
@@ -82,12 +81,30 @@ class TestSubscriptions extends TestCase
     /**
      * @covers \App\Repositories\Subscriptions::delete
      */
-    public function testShouldGetBoolWhenDeletesubscription(): void
+    public function testShouldGetOneWhenDeleteSubscription(): void
     {
-        $subscription = Subscription::store('abc', ['dummy data']);
+        $subscriptionData = getSubscriptionData(['id' => mt_rand(), 'license_key'=> 'abc' ]);
+
+        Subscription::store($subscriptionData['license_key'], $subscriptionData);
+
         $result = app(Subscriptions::class)->delete('abc');
 
-        $this->assertEquals($subscription->id, $result);
-        $this->notSeeInDatabase('subscriptions', array( 'license' => 'abc'));
+        $this->assertEquals(1, $result);
+        $this->notSeeInDatabase('subscriptions', array( 'license' => $subscriptionData['license_key']));
+    }
+
+    /**
+     * @covers \App\Repositories\Subscriptions:deleteBySubscriptionID
+     */
+    public function testShouldReturnOneWhenDeleteSubscriptionByID(): void
+    {
+        $subscriptionData = getSubscriptionData(['id' => mt_rand(), 'license_key'=> 'abc' ]);
+
+        Subscription::store($subscriptionData['license_key'], $subscriptionData);
+
+        $result = app(Subscriptions::class)->deleteBySubscriptionID($subscriptionData['id']);
+
+        $this->assertEquals(1, $result);
+        $this->notSeeInDatabase('subscriptions', array( 'license' => $subscriptionData['license_key']));
     }
 }
