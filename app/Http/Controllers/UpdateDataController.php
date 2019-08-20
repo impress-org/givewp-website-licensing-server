@@ -7,6 +7,7 @@ use App\Repositories\Licenses;
 use App\Repositories\Subscriptions;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
 use Laravel\Lumen\Routing\Controller as BaseController;
 
 /**
@@ -62,12 +63,11 @@ class UpdateDataController extends BaseController
      * Handle add-on update
      *
      * @return bool
+     * @throws ValidationException
      */
     private function handleAddonUpdate(): bool
     {
-        if (! $this->request->filled('addon')) {
-            return false;
-        }
+        $this->validate($this->request, ['addon' => 'required|string']);
 
         $addon = $this->request->input('addon');
 
@@ -81,12 +81,11 @@ class UpdateDataController extends BaseController
      * Handle license update
      *
      * @return bool
+     * @throws ValidationException
      */
     private function handleLicenseUpdate(): bool
     {
-        if (! $this->request->filled('license')) {
-            return false;
-        }
+        $this->validate($this->request, ['license' => 'required|string']);
 
         $license = array_map('trim', explode(',', $this->request->input('license')));
         app(Licenses::class)->deleteAll($license);
@@ -98,14 +97,13 @@ class UpdateDataController extends BaseController
      * Handle subscription update
      *
      * @return bool
+     * @throws ValidationException
      */
     private function handleSubscriptionUpdate(): bool
     {
-        if (! $this->request->filled('license')) {
-            return false;
-        }
+        $this->validate($this->request, ['subscription' => 'required|string']);
 
-        app(Subscriptions::class)->delete(trim($this->request->input('license')));
+        app(Subscriptions::class)->delete((int) trim($this->request->input('subscription')));
 
         return true;
     }
