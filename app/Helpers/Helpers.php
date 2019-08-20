@@ -21,7 +21,6 @@ if (! function_exists('getLicenseIdentifier')) {
 if (! function_exists('getClientWebsiteURLFromUserAgent')) {
     /**
      * Get client website URL from user agent
-     * @todo: https://github.com/impress-org/give-website-licensing-server/pull/7#discussion_r315290745
      *
      * @return string
      */
