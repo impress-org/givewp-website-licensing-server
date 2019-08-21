@@ -81,6 +81,13 @@ class AppFresh extends Command
             return 3;
         }
 
+        $this->info('Running updates...');
+        if ($this->call('app:update')) {
+            $this->error('Failed to run application updates');
+
+            return 4;
+        }
+
         return 0;
     }
 }
