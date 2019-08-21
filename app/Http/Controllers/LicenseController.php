@@ -89,7 +89,7 @@ class LicenseController extends BaseController
                 break;
 
             case 'check_subscription':
-                $this->validate($this->request, ['license' => 'required|string', 'item_name' => 'required|string']);
+                $this->validate($this->request, ['license' => 'required|string']);
 
                 $response = $this->handleCheckSubscription();
                 break;
