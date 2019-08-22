@@ -16,8 +16,11 @@ Main responsibility of this app to reduce license verification loads from GiveWP
 - Get add-on information
 
 Note: This app will act as proxy which will handle license validation on behalf of GiveWP. Pagely setup a custom redirection rule which we redirect all request on `https://givewp.com/edd-sl-api` to `https://licensing.givewp.com/
-edd-al-api` except if request will come from `https://licensing.givewp.com/
-                                             edd-al-api`
+edd-al-api` except if request will come from `https://licensing.givewp.com/edd-al-api`
+
+live site url: https://licensing.givewp.com/
+<br>staging site url: https://staging.licensing.givewp.com/
+
                                              
 ## Local Development
 
