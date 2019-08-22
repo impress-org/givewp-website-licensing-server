@@ -12,7 +12,8 @@
         "google/cloud-logging": "^1.17",
         "guzzlehttp/guzzle": "^6.3",
         "illuminate/redis": "^5.8",
-        "laravel/lumen-framework": "5.8.*"
+        "laravel/lumen-framework": "5.8.*",
+        "predis/predis": "^1.1"
     },
     "require-dev": {
         "fzaninotto/faker": "^1.4",
