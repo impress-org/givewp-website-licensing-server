@@ -95,7 +95,8 @@ commands:
           gcloud-service-key:  << parameters.gcloud-service-key >>
           google-compute-zone: << parameters.google-compute-zone >>
           google-project-id:   << parameters.google-project-id >>
-      - run: gcloud app deploy --quiet -v "v$(php artisan app:version --plain | sed 's/\./-/g')" <<# parameters.no-promote >> --no-promote <</ parameters.no-promote >>
+      - run: gcloud components install beta
+      - run: gcloud beta app deploy --quiet -v "v$(php artisan app:version --plain | sed 's/\./-/g')" <<# parameters.no-promote >> --no-promote <</ parameters.no-promote >>
 
 jobs:
   checkout-code:
