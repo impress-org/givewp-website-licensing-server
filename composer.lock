@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "749b3581011e12950d1f7e738dd8b253",
+    "content-hash": "696f91ac56386ce062d328b1b2621f88",
     "packages": [
         {
             "name": "doctrine/inflector",
@@ -5640,42 +5640,6 @@
                 "validate"
             ],
             "time": "2018-12-25T11:19:39+00:00"
-        },
-        {
-            "name": "wickedreports/phpcs-pre-commit-hook",
-            "version": "0.7",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/WickedReports/phpcs-pre-commit-hook.git",
-                "reference": "d376e83d5d8038cf9eb8e4cccc0fce160763e0ad"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/WickedReports/phpcs-pre-commit-hook/zipball/d376e83d5d8038cf9eb8e4cccc0fce160763e0ad",
-                "reference": "d376e83d5d8038cf9eb8e4cccc0fce160763e0ad",
-                "shasum": ""
-            },
-            "require": {
-                "squizlabs/php_codesniffer": "3.*"
-            },
-            "type": "scripts",
-            "autoload": {
-                "psr-4": {
-                    "PHPCodeChecker\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "GPL-3.0"
-            ],
-            "authors": [
-                {
-                    "name": "Stanislav Malkin",
-                    "email": "stan@wickedreports.com"
-                }
-            ],
-            "description": "PHPCS check before commit",
-            "time": "2018-03-13T23:57:17+00:00"
         }
     ],
     "aliases": [],
