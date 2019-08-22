@@ -9,6 +9,19 @@ Master: [![CircleCI](https://circleci.com/gh/impress-org/givewp-website-licensin
 
 ## Local Development
 
+## Description
+Main responsibility of this app to reduce license verification loads from GiveWP. Sometime we faces `503` error on this site because of large number of request on `edd-sl-api` endpoint.
+`edd-sl-api` uses for following jobs:
+- License validation
+- License activation
+- License Deactivation
+- Subscription validation
+- Get add-on information
+
+Note: This app will act as proxy which will handle license validation on behalf of GiveWP. Pagely setup a custom redirection rule which we redirect all request on `https://givewp.com/edd-sl-api` to `https://licensing.givewp.com/
+edd-al-api` except if request will come from `https://licensing.givewp.com/
+                                             edd-al-api`
+
 ### Prerequisites
 
 - Git
