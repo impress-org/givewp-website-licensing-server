@@ -1,0 +1,4 @@
+{
+    "*.json": ["prettier --write", "git add"],
+    "*.php": ["./vendor/bin/phpcbf --standard=PSR2", "git add"]
+}
