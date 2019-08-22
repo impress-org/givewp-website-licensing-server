@@ -1,6 +1,8 @@
 <?php
 
-require_once __DIR__.'/../vendor/autoload.php';
+use Illuminate\Redis\RedisServiceProvider;
+
+require_once __DIR__ . '/../vendor/autoload.php';
 
 $envFile = isset($_ENV['APP_ENV']) ? ".env.{$_ENV['APP_ENV']}" : '.env';
 
@@ -88,7 +90,7 @@ $app->routeMiddleware([
 // $app->register(App\Providers\AppServiceProvider::class);
 // $app->register(App\Providers\AuthServiceProvider::class);
 // $app->register(App\Providers\EventServiceProvider::class);
-
+$app->register(RedisServiceProvider::class);
 
 /*
 |--------------------------------------------------------------------------
