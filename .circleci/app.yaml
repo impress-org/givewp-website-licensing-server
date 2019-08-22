@@ -47,5 +47,5 @@ beta_settings:
     cloud_sql_instances: [DB_CONNECTION_NAME]
 
 vpc_access_connector:
-    name: "projects/[GCP_PROJECT_ID]/locations/[GCP_COMPUTE_ZONE]/[GCP_VPC_CONNECTOR]"
+    name: "projects/[GCP_PROJECT_ID]/locations/[GCP_COMPUTE_ZONE]/connectors/[GCP_VPC_CONNECTOR]"
 
