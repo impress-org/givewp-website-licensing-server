@@ -43,6 +43,8 @@ commands:
         type: env_var_name
       gcp-vpc-connector:
         type: env_var_name
+      redis-host:
+        type: env_var_name
       db-username:
         type: env_var_name
       db-password:
@@ -69,6 +71,7 @@ commands:
                    GCP_PROJECT_ID,${<< parameters.gcp-project-id >>}
                    GCP_COMPUTE_ZONE,${<< parameters.gcp-compute-zone >>}
                    GCP_VPC_CONNECTOR,${<< parameters.gcp-vpc-connector >>}
+                   REDIS_HOST,${<< parameters.redis-host >>}
                    DB_USERNAME,${<< parameters.db-username >>}
                    DB_PASSWORD,${<< parameters.db-password >>}
                    DB_CONNECTION_NAME,${<< parameters.db-connection-name >>}
@@ -159,6 +162,7 @@ jobs:
           gcp-project-id:          STAGING_GCP_PROJECT_ID
           gcp-compute-zone:        STAGING_GCP_COMPUTE_ZONE
           gcp-vpc-connector:       STAGING_GCP_VPC_CONNECTOR
+          redis-host:              STAGING_REDIS_HOST
           db-username:             STAGING_DB_USERNAME
           db-password:             STAGING_DB_PASSWORD
           db-connection-name:      STAGING_DB_CONNECTION_NAME
@@ -187,6 +191,7 @@ jobs:
           gcp-project-id:          PROD_GCP_PROJECT_ID
           gcp-compute-zone:        PROD_GCP_COMPUTE_ZONE
           gcp-vpc-connector:       PROD_GCP_VPC_CONNECTOR
+          redis-host:              PROD_REDIS_HOST
           db-username:             PROD_DB_USERNAME
           db-password:             PROD_DB_PASSWORD
           db-connection-name:      PROD_DB_CONNECTION_NAME
