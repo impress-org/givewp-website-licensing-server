@@ -7,15 +7,15 @@ Staging: [![CircleCI](https://circleci.com/gh/impress-org/givewp-website-licensi
 Master: [![CircleCI](https://circleci.com/gh/impress-org/givewp-website-licensing-server/tree/master.svg?style=svg)](https://circleci.com/gh/impress-org/givewp-website-licensing-server/tree/master) 
 
 ## Description
-The main responsibility of this app to is to reduce license verification loads from GiveWP. Sometimes we face 503 errors on this site because of large number of request to the edd-sl-api license endpoint.
-`edd-sl-api` uses for following jobs:
+The main responsibility of this app is to reduce license verification loads from GiveWP. Sometimes we face 503 errors on this site because of the large number of request to the `edd-sl-api` license endpoint.
+`edd-sl-api` uses for the following jobs:
 - License validation
 - License activation
 - License deactivation
 - Subscription validation
 - Get add-on information
 
-Note: Note: This app will act as a proxy which will handle license validation on behalf of GiveWP. Pagely setup a custom redirection rule which will redirect all request on https://givewp.com/edd-sl-api to `https://licensing.givewp.com/` except if request will come from `https://licensing.givewp.com/edd-al-api`
+Note: Note: This app will act as a proxy which will handle license validation on behalf of GiveWP. Pagely setup a custom redirection rule which will redirect all request on https://givewp.com/edd-sl-api to `https://licensing.givewp.com/` except if a request will come from `https://licensing.givewp.com/edd-al-api`
 
 live site url: https://licensing.givewp.com/
 <br>staging site url: https://staging.licensing.givewp.com/
@@ -39,7 +39,7 @@ live site url: https://licensing.givewp.com/
             - Do *NOT* include spaces in your path.
         - Environment: Custom (not Preferred)
         - PHP Version: 7.2
-        - Web Server: nginx
+        - Web Server: Nginx
         - MySQL Version: 5.6
         - Enter any WordPress credentials as they will not be used.
         - Trust the certificate in the SSL tab of Local Lightning.
@@ -63,7 +63,7 @@ live site url: https://licensing.givewp.com/
     - In `lumen.test/app`, run: `yarn && yarn dev`
 8. Set up the database.
     - To wipe the database and start fresh, run: `php artisan migrate:fresh`
-9. Set Local  to force HTTPS.
+9. Set Local to force HTTPS.
     - From the site's root directory, open `confg/nginx/site.cnf`.
     - Add the following lines below `root /app/public/;`:
 
@@ -86,7 +86,7 @@ instead.
 ### Running PHPUnit Tests
 
 Running PHPUnit tests requires an additional `.env.testing` file. You may use a different database or the same, just keep
-in mind that unit tests will overwrite the database. You will also want to add the following to avoid errors:
+in mind, that unit tests will overwrite the database. You will also want to add the following to avoid errors:
 
 ```
 TELESCOPE_ENABLED=false
