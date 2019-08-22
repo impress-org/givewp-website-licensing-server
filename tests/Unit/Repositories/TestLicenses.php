@@ -196,7 +196,7 @@ class TestLicenses extends TestCase
      */
     public function testShouldReturnLicenseModelWithExpiredStatusWhenGetSingleLicense(): void
     {
-        $license_data = getLicenseData(['license_key' => 'abc', 'expires' => strtotime('-2 year')]);
+        $license_data = getLicenseData(['license_key' => 'abc', 'expires' => date( 'Y-m-d H:i:s', strtotime('-2 year'))]);
         License::store($license_data['check_license']['license_key'], $license_data);
 
         $output = $this->license->get($license_data['check_license']['license_key']);
@@ -210,8 +210,8 @@ class TestLicenses extends TestCase
     public function testShouldReturnLicenseModelWithExpiredStatusWhenGetMultipleLicenses(): void
     {
         $abc_license_data = getLicenseData(['license_key' => 'abc' ]);
-        $def_license_data = getLicenseData(['license_key' => 'def', 'expires' => strtotime('-2 year') ]);
-        $ghi_license_data = getLicenseData(['license_key' => 'ghi', 'expires' => strtotime('-2 year') ]);
+        $def_license_data = getLicenseData(['license_key' => 'def', 'expires' =>  date( 'Y-m-d H:i:s', strtotime('-2 year'))]);
+        $ghi_license_data = getLicenseData(['license_key' => 'ghi', 'expires' =>  date( 'Y-m-d H:i:s', strtotime('-2 year'))]);
 
         License::store($abc_license_data['check_license']['license_key'], $abc_license_data);
         License::store($def_license_data['check_license']['license_key'], $def_license_data);
