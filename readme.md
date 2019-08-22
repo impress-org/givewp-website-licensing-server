@@ -7,16 +7,15 @@ Staging: [![CircleCI](https://circleci.com/gh/impress-org/givewp-website-licensi
 Master: [![CircleCI](https://circleci.com/gh/impress-org/givewp-website-licensing-server/tree/master.svg?style=svg)](https://circleci.com/gh/impress-org/givewp-website-licensing-server/tree/master) 
 
 ## Description
-Main responsibility of this app to reduce license verification loads from GiveWP. Sometime we faces `503` error on this site because of large number of request on `edd-sl-api` endpoint.
+The main responsibility of this app to is to reduce license verification loads from GiveWP. Sometimes we face 503 errors on this site because of large number of request to the edd-sl-api license endpoint.
 `edd-sl-api` uses for following jobs:
 - License validation
 - License activation
-- License Deactivation
+- License deactivation
 - Subscription validation
 - Get add-on information
 
-Note: This app will act as proxy which will handle license validation on behalf of GiveWP. Pagely setup a custom redirection rule which we redirect all request on `https://givewp.com/edd-sl-api` to `https://licensing.givewp.com/
-edd-al-api` except if request will come from `https://licensing.givewp.com/edd-al-api`
+Note: Note: This app will act as a proxy which will handle license validation on behalf of GiveWP. Pagely setup a custom redirection rule which will redirect all request on https://givewp.com/edd-sl-api to `https://licensing.givewp.com/` except if request will come from `https://licensing.givewp.com/edd-al-api`
 
 live site url: https://licensing.givewp.com/
 <br>staging site url: https://staging.licensing.givewp.com/
