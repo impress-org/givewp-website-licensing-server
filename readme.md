@@ -4,7 +4,6 @@ Develop: [![CircleCI](https://circleci.com/gh/impress-org/givewp-website-licensi
 
 Staging: [![CircleCI](https://circleci.com/gh/impress-org/givewp-website-licensing-server/tree/staging.svg?style=svg)](https://circleci.com/gh/impress-org/givewp-website-licensing-server/tree/staging)
 
-
 Master: [![CircleCI](https://circleci.com/gh/impress-org/givewp-website-licensing-server/tree/master.svg?style=svg)](https://circleci.com/gh/impress-org/givewp-website-licensing-server/tree/master) 
 
 ## Description
