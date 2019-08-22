@@ -77,3 +77,6 @@ in mind that unit tests will overwrite the database. You will also want to add t
 ```
 TELESCOPE_ENABLED=false
 ```
+
+1. SSH login to `https://lumen.test`
+2. run `vendor/bin/phpunit` in `~/app` project root folder
