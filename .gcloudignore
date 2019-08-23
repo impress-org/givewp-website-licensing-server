@@ -12,14 +12,25 @@
 .git
 .gitignore
 /.circleci
+/.postman
 /README.md
 /.editorconfig
+/.lintstagedrc.json
+/.prettierrc.json
+/.huskyrc.json
+/commitlint.config.js
+/package.json
+/yarn.lock
+/phpcs.xml
+/phpunit.xml
+/.styleci.yml
 
 # Laravel & Test files
 /storage
 /tests
 /.env
 /.env.testing
+/.env.example
 
 # Composer files
 /vendor
