@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Unit\Repositories;
 
 use App\Repositories\SystemOptions;
@@ -31,9 +30,9 @@ class TestSystemOptions extends TestCase
         $repository->add('foo', '1', 'boolean');
 
         $this->seeInDatabase('system_options', [
-            'key'   => 'foo',
+            'key' => 'foo',
             'value' => '1',
-            'type'  => 'boolean'
+            'type' => 'boolean'
         ]);
 
         // Should throw error that option already exists
@@ -76,17 +75,17 @@ class TestSystemOptions extends TestCase
         $repository->update('foo', 'bar');
 
         $this->seeInDatabase('system_options', [
-            'key'   => 'foo',
-            'value' => 'bar',
+            'key' => 'foo',
+            'value' => 'bar'
         ]);
 
         // Should update the existing option
         $repository->update('foo', 'fizzle', 'boolean');
 
         $this->seeInDatabase('system_options', [
-            'key'   => 'foo',
+            'key' => 'foo',
             'value' => 'fizzle',
-            'type'  => 'boolean'
+            'type' => 'boolean'
         ]);
     }
 

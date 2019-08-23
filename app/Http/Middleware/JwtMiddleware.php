@@ -18,7 +18,7 @@ class JwtMiddleware
      *
      * @return JsonResponse|mixed
      */
-    public function handle(Request $request, Closure $next, $guard = null)
+    public function handle(Request $request, Closure $next)
     {
         $token = $request->get('token');
 

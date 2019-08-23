@@ -63,8 +63,6 @@ class UpdateDataController extends BaseController
     /**
      * Handle add-on update
      *
-     * @todo: Add-on update will cause of deletion of all access pass licenses database entry. Need to figure out a way to tackle this.
-     *
      * @return bool
      * @throws ValidationException
      */

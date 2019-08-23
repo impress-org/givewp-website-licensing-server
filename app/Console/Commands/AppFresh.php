@@ -37,16 +37,6 @@ class AppFresh extends Command
     }
 
     /**
-     * AppFresh constructor.
-     *
-     * @since 0.3.0
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @since 0.3.0

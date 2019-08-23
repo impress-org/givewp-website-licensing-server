@@ -34,10 +34,7 @@ class TestSubscriptions extends TestCase
      */
     public function testContainer(): void
     {
-        $this->assertInstanceOf(
-            Subscriptions::class,
-            app(Subscriptions::class)
-        );
+        $this->assertInstanceOf(Subscriptions::class, app(Subscriptions::class));
     }
 
     /**
@@ -46,7 +43,7 @@ class TestSubscriptions extends TestCase
     public function testShouldReturnNullWhenGetNonExistingSubscription(): void
     {
         $license_key = 'abc';
-        $output = $this->subscription->get($license_key);
+        $output      = $this->subscription->get($license_key);
 
         $this->assertEquals(null, $output);
     }
@@ -56,7 +53,7 @@ class TestSubscriptions extends TestCase
      */
     public function testShouldReturnSubscriptionModelWhenGetSubscription(): void
     {
-        $subscriptionData = getSubscriptionData(['id' => mt_rand(), 'license_key'=> 'abc' ]);
+        $subscriptionData = getSubscriptionData(['id' => mt_rand(), 'license_key' => 'abc']);
 
         Subscription::store($subscriptionData['license_key'], $subscriptionData);
 
@@ -75,7 +72,7 @@ class TestSubscriptions extends TestCase
         $result = app(Subscriptions::class)->delete('abc');
 
         $this->assertEquals(0, $result);
-        $this->notSeeInDatabase('subscriptions', array( 'license' => 'abc'));
+        $this->notSeeInDatabase('subscriptions', array('license' => 'abc'));
     }
 
     /**
@@ -83,14 +80,14 @@ class TestSubscriptions extends TestCase
      */
     public function testShouldGetOneWhenDeleteSubscription(): void
     {
-        $subscriptionData = getSubscriptionData(['id' => mt_rand(), 'license_key'=> 'abc' ]);
+        $subscriptionData = getSubscriptionData(['id' => mt_rand(), 'license_key' => 'abc']);
 
         Subscription::store($subscriptionData['license_key'], $subscriptionData);
 
         $result = app(Subscriptions::class)->delete('abc');
 
         $this->assertEquals(1, $result);
-        $this->notSeeInDatabase('subscriptions', array( 'license' => $subscriptionData['license_key']));
+        $this->notSeeInDatabase('subscriptions', array('license' => $subscriptionData['license_key']));
     }
 
     /**
@@ -98,13 +95,13 @@ class TestSubscriptions extends TestCase
      */
     public function testShouldReturnOneWhenDeleteSubscriptionByID(): void
     {
-        $subscriptionData = getSubscriptionData(['id' => mt_rand(), 'license_key'=> 'abc' ]);
+        $subscriptionData = getSubscriptionData(['id' => mt_rand(), 'license_key' => 'abc']);
 
         Subscription::store($subscriptionData['license_key'], $subscriptionData);
 
         $result = app(Subscriptions::class)->deleteBySubscriptionID($subscriptionData['id']);
 
         $this->assertEquals(1, $result);
-        $this->notSeeInDatabase('subscriptions', array( 'license' => $subscriptionData['license_key']));
+        $this->notSeeInDatabase('subscriptions', array('license' => $subscriptionData['license_key']));
     }
 }

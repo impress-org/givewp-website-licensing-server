@@ -17,9 +17,9 @@ if ($argc < 3) {
 
 // Grab the filename from the first argument
 $filename = $argv[1];
-$file = __DIR__ . "/$filename";
+$file     = __DIR__ . "/$filename";
 
-if ( ! is_readable($file)) {
+if (! is_readable($file)) {
     error_and_die('Error: Unable to find and read the app.yaml file. It should be a sibling of this file.');
 }
 
@@ -33,14 +33,13 @@ for ($index = 2; $index < $argc; $index++) {
     }
 
     [$search_for, $replace_with] = $replacement;
-    $contents = str_replace("[$search_for]", $replace_with, $contents, $count);
+    $contents                    = str_replace("[$search_for]", $replace_with, $contents, $count);
 
-    if ( $count < 1 ) {
+    if ($count < 1) {
         error_and_die("Error: Did not find any instances of [$search_for]");
     }
 }
 
-if ( false === file_put_contents(__DIR__ . "/../$filename", $contents) ) {
+if (false === file_put_contents(__DIR__ . "/../$filename", $contents)) {
     error_and_die('Failed to write to the app.yaml file in the parent directory');
 }
-

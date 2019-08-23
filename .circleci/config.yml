@@ -140,6 +140,9 @@ jobs:
       # prepare the database
       - run: mysqladmin create test --host="127.0.0.1" --user="root" --password="root"
 
+      # run phpcs
+      - run: ./vendor/bin/phpcs
+
       # run tests
       - run: ./vendor/bin/phpunit
 

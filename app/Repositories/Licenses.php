@@ -27,7 +27,7 @@ class Licenses
      */
     public function get($license_key): ?License
     {
-        $key = getLicenseIdentifier($license_key);
+        $key     = getLicenseIdentifier($license_key);
         $license = License::where('key', $key)->first();
         $license = $this->setExpiredStatus($license);
 
@@ -117,7 +117,7 @@ class Licenses
             && $license->data['check_license']['expires'] !== 'lifetime'
             && strtotime($license->data['check_license']['expires']) <= time()
         ) {
-            $tmp = $license->data;
+            $tmp                             = $license->data;
             $tmp['check_license']['license'] = 'expired';
 
             $license->data = $tmp;
