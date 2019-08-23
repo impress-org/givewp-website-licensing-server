@@ -53,11 +53,9 @@ class ArtisanController extends Controller
      *
      * @since 0.1.0
      *
-     * @param Request $request
-     *
      * @return Response
      */
-    public function update(Request $request): Response
+    public function update(): Response
     {
         // Run the updater
         Artisan::call('app:update');

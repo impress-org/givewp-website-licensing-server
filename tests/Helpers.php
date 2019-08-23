@@ -12,6 +12,7 @@ if (!function_exists('getLicenseData')) {
      */
     function getLicenseData($licenseData)
     {
+        // @codingStandardsIgnoreStart
         $defaultLicenseData = [
             'success' => true,
             'license' => 'valid',
@@ -35,6 +36,7 @@ if (!function_exists('getLicenseData')) {
             'readme' => 'http://staging.givewp.com//downloads/plugins/give-form-field-manager/readme.txt',
             'plugin_slug' => 'give-form-field-manager'
         ];
+        // @codingStandardsIgnoreEnd
 
         $licenseData = array_merge($defaultLicenseData, $licenseData);
         $licenseData = ['check_license' => $licenseData];
@@ -53,6 +55,7 @@ if (!function_exists('getSubscriptionData')) {
      */
     function getSubscriptionData($subscriptionData)
     {
+        // @codingStandardsIgnoreStart
         $defaultSubscriptionData = [
             'success' => false,
             'id' => 669,
@@ -64,6 +67,7 @@ if (!function_exists('getSubscriptionData')) {
             'invoice_url' =>
                 'http%3A%2F%2Fstaging.givewp.com%2Fpurchase-confirmation%2F%3Fpayment_key%3D2da1e1b542c298b806b89a14cd7b57ab'
         ];
+        // @codingStandardsIgnoreEnd
 
         return array_merge($defaultSubscriptionData, $subscriptionData);
     }
@@ -79,6 +83,7 @@ if (!function_exists('getAddonData')) {
      */
     function getAddonData($addonData)
     {
+        // @codingStandardsIgnoreStart
         $defaultAddonData = [
             'new_version' => '1.8.13',
             'stable_version' => '1.8.13',
@@ -98,6 +103,7 @@ if (!function_exists('getAddonData')) {
             'icons' =>
                 "a:2:{s:2:\"1x\";s:68:\"http://givewp.test/wp-content/uploads/2019/06/icon-givewp-square.png\";s:2:\"2x\";s:68:\"http://givewp.test/wp-content/uploads/2019/06/icon-givewp-square.png\";}"
         ];
+        // @codingStandardsIgnoreEnd
 
         return array_merge($defaultAddonData, $addonData);
     }

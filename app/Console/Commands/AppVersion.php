@@ -22,18 +22,6 @@ class AppVersion extends Command
     protected $description = 'Displays the current app and database versions';
 
     /**
-     * Create a new command instance.
-     *
-     * @since 0.1.0
-     *
-     * @return void
-     */
-    public function __construct()
-    {
-        parent::__construct();
-    }
-
-    /**
      * Execute the console command.
      *
      * @since 0.1.0
