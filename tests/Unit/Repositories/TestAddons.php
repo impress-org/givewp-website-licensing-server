@@ -42,7 +42,7 @@ class TestAddons extends TestCase
     public function testShouldReturnNullWhenGetNonExistingAddon(): void
     {
         $addon_name = 'abc';
-        $output = $this->addon->get($addon_name);
+        $output     = $this->addon->get($addon_name);
 
         $this->assertEquals(null, $output);
     }
@@ -79,7 +79,7 @@ class TestAddons extends TestCase
      */
     public function testShouldGetBoolWhenDeleteAddon(): void
     {
-        $addon = Addon::store('abc', ['dummy data']);
+        $addon  = Addon::store('abc', ['dummy data']);
         $result = app(Addons::class)->delete('abc');
 
         $this->assertEquals($addon->id, $result);

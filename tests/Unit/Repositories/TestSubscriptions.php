@@ -46,7 +46,7 @@ class TestSubscriptions extends TestCase
     public function testShouldReturnNullWhenGetNonExistingSubscription(): void
     {
         $license_key = 'abc';
-        $output = $this->subscription->get($license_key);
+        $output      = $this->subscription->get($license_key);
 
         $this->assertEquals(null, $output);
     }

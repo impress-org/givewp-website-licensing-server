@@ -106,9 +106,9 @@ class LicenseController extends BaseController
      */
     private function handleCheckLicenses(): array
     {
-        $response       = array();
-        $license_keys   = array_map('trim', explode(',', $this->request->input('licenses')));
-        $unlicensed     = array_map('trim', explode(',', $this->request->input('unlicensed')));
+        $response     = array();
+        $license_keys = array_map('trim', explode(',', $this->request->input('licenses')));
+        $unlicensed   = array_map('trim', explode(',', $this->request->input('unlicensed')));
 
         if (! empty($license_keys)) {
             foreach ($license_keys as $key => $license_key) {
@@ -134,7 +134,7 @@ class LicenseController extends BaseController
 
         // Remove empty values.
         $license_keys = array_filter($license_keys);
-        $unlicensed = array_filter($unlicensed);
+        $unlicensed   = array_filter($unlicensed);
 
         // Fetch remain results from GiveWP
         if (! empty($license_keys) || ! empty($unlicensed)) {
