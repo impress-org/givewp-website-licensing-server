@@ -62,7 +62,6 @@ class TestAddons extends TestCase
         $this->assertEquals(['dummy data'], $output->data);
     }
 
-
     /**
      * @covers \App\Repositories\Addons::delete
      */
@@ -71,7 +70,7 @@ class TestAddons extends TestCase
         $result = app(Addons::class)->delete('abc');
 
         $this->assertEquals(0, $result);
-        $this->notSeeInDatabase('addons', array( 'addon' => 'abc'));
+        $this->notSeeInDatabase('addons', array('addon' => 'abc'));
     }
 
     /**
@@ -83,6 +82,6 @@ class TestAddons extends TestCase
         $result = app(Addons::class)->delete('abc');
 
         $this->assertEquals($addon->id, $result);
-        $this->notSeeInDatabase('addons', array( 'addon' => 'abc'));
+        $this->notSeeInDatabase('addons', array('addon' => 'abc'));
     }
 }

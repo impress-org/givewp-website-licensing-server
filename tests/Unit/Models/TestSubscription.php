@@ -43,7 +43,7 @@ class TestSubscription extends TestCase
         /**
          * Case: If license exist
          */
-        $subscriptionData = getSubscriptionData(['id' => mt_rand(), 'license_key'=> 'abc' ]);
+        $subscriptionData = getSubscriptionData(['id' => mt_rand(), 'license_key' => 'abc']);
 
         Subscription::store($subscriptionData['license_key'], $subscriptionData);
 

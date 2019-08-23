@@ -1,6 +1,5 @@
 <?php
 
-
 namespace Tests\Unit\Models;
 
 use App\Models\SystemOption;
@@ -12,7 +11,7 @@ class TestSystemOption extends TestCase
     {
         // Should have a default type of string
         $option = new SystemOption([
-            'key'   => 'foo',
+            'key' => 'foo',
             'value' => 'bar'
         ]);
 
@@ -20,9 +19,9 @@ class TestSystemOption extends TestCase
 
         // Should cast to a boolean
         $option = new SystemOption([
-            'key'   => 'foo',
+            'key' => 'foo',
             'value' => 1,
-            'type'  => 'boolean'
+            'type' => 'boolean'
         ]);
 
         $this->assertTrue($option->value);
@@ -31,9 +30,9 @@ class TestSystemOption extends TestCase
         $json = ['test' => 'baz'];
 
         $option = new SystemOption([
-            'key'   => 'foo',
+            'key' => 'foo',
             'value' => $json,
-            'type'  => 'json'
+            'type' => 'json'
         ]);
 
         $this->assertSame($json, $option->value);

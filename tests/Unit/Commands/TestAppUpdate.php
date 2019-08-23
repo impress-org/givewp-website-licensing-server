@@ -32,17 +32,26 @@ class TestAppUpdate extends TestCase
         // Set up mock upgrade
         /** @var Mockery\MockInterface $upgrade */
         $upgrade = Mockery::spy(VersionUpgrade::class);
-        $this->app->bind(VersionUpgrade::class, function () use ($upgrade) {
-            return $upgrade;
-        }, true);
+        $this->app->bind(
+            VersionUpgrade::class,
+            function () use ($upgrade) {
+                return $upgrade;
+            },
+            true
+        );
 
-        $upgrade->allows()->getVersion()->andReturns($version);
+        $upgrade
+            ->allows()
+            ->getVersion()
+            ->andReturns($version);
         $upgrade->allows()->runUpgrade();
-
 
         // Set up mock options
         $options = Mockery::spy(SystemOptions::class);
-        $options->allows()->get('app_version')->andReturns('1.0.0');
+        $options
+            ->allows()
+            ->get('app_version')
+            ->andReturns('1.0.0');
         $options->allows()->update('app_version', '1.1.0');
         $this->app->instance(SystemOptions::class, $options);
 
@@ -94,7 +103,10 @@ class TestAppUpdate extends TestCase
     {
         // Set up mock options
         $options = Mockery::spy(SystemOptions::class);
-        $options->allows()->get('app_version')->andReturns(null);
+        $options
+            ->allows()
+            ->get('app_version')
+            ->andReturns(null);
         $this->app->instance(SystemOptions::class, $options);
 
         // Should exit due to no database version
@@ -111,14 +123,24 @@ class TestAppUpdate extends TestCase
         // Set up mock upgrade
         /** @var Mockery\MockInterface $upgrade */
         $upgrade = Mockery::spy(VersionUpgrade::class);
-        $upgrade->allows()->getVersion()->andReturns('1.1.1');
-        $this->app->bind(VersionUpgrade::class, function () use ($upgrade) {
-            return $upgrade;
-        }, true);
+        $upgrade
+            ->allows()
+            ->getVersion()
+            ->andReturns('1.1.1');
+        $this->app->bind(
+            VersionUpgrade::class,
+            function () use ($upgrade) {
+                return $upgrade;
+            },
+            true
+        );
 
         // Set up mock options
         $options = Mockery::spy(SystemOptions::class);
-        $options->allows()->get('app_version')->andReturns('1.0.0');
+        $options
+            ->allows()
+            ->get('app_version')
+            ->andReturns('1.0.0');
         $this->app->instance(SystemOptions::class, $options);
 
         // Set mock config values
