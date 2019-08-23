@@ -1,10 +1,10 @@
 ## Status
 
-Develop: [![CircleCI](https://circleci.com/gh/impress-org/givewp-website-licensing-server/tree/develop.svg?style=svg)](https://circleci.com/gh/impress-org/givewp-website-licensing-server/tree/develop)
+Develop: [![CircleCI](https://circleci.com/gh/impress-org/givewp-website-licensing-server/tree/develop.svg?style=svg&circle-token=b31e0f769943448843e6c777e0f083be803448a6)](https://circleci.com/gh/impress-org/givewp-website-licensing-server/tree/develop)
 
-Staging: [![CircleCI](https://circleci.com/gh/impress-org/givewp-website-licensing-server/tree/staging.svg?style=svg)](https://circleci.com/gh/impress-org/givewp-website-licensing-server/tree/staging)
+Staging: [![CircleCI](https://circleci.com/gh/impress-org/givewp-website-licensing-server/tree/staging.svg?style=svg&circle-token=b31e0f769943448843e6c777e0f083be803448a6)](https://circleci.com/gh/impress-org/givewp-website-licensing-server/tree/staging)
 
-Master: [![CircleCI](https://circleci.com/gh/impress-org/givewp-website-licensing-server/tree/master.svg?style=svg)](https://circleci.com/gh/impress-org/givewp-website-licensing-server/tree/master) 
+Master: [![CircleCI](https://circleci.com/gh/impress-org/givewp-website-licensing-server/tree/master.svg?style=svg&circle-token=b31e0f769943448843e6c777e0f083be803448a6)](https://circleci.com/gh/impress-org/givewp-website-licensing-server/tree/master)
 
 ## Description
 The main responsibility of this app is to reduce license verification loads from GiveWP. Sometimes we face 503 errors on this site because of the large number of request to the `edd-sl-api` license endpoint.
