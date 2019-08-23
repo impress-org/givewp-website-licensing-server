@@ -75,18 +75,15 @@
 
     <file>.</file>
 
+    <exclude-pattern>*/.circle/*</exclude-pattern>
+    <exclude-pattern>*/.postman/*</exclude-pattern>
+    <exclude-pattern>*/config/*</exclude-pattern>
     <exclude-pattern>*/database/*</exclude-pattern>
+    <exclude-pattern>*/node_modules/*</exclude-pattern>
     <exclude-pattern>*/cache/*</exclude-pattern>
-    <exclude-pattern>*/*.xml</exclude-pattern>
-    <exclude-pattern>*/autoload.php</exclude-pattern>
     <exclude-pattern>*/storage/*</exclude-pattern>
     <exclude-pattern>*/vendor/*</exclude-pattern>
-    <exclude-pattern>*/node_modules/*</exclude-pattern>
-    <exclude-pattern>*/migrations/*</exclude-pattern>
-    <exclude-pattern>*/config/*</exclude-pattern>
-    <exclude-pattern>*/Middleware/*</exclude-pattern>
+
     <exclude-pattern>*/Console/Kernel.php</exclude-pattern>
-    <exclude-pattern>*/Exceptions/Handler.php</exclude-pattern>
     <exclude-pattern>*/Http/Kernel.php</exclude-pattern>
-    <exclude-pattern>*/Providers/*</exclude-pattern>
 </ruleset>
