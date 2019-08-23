@@ -1,0 +1,455 @@
+{
+    "info": {
+        "_postman_id": "d5e7d15f-a79b-4cc7-80bd-348a4ca3f7b2",
+        "name": "GiveWP",
+        "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+    },
+    "item": [
+        {
+            "name": "Staging",
+            "item": [
+                {
+                    "name": "Get Addon Information",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "edd_action",
+                                    "value": "get_version",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "item_name",
+                                    "value": "recurring donations",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "https://staging.givewp.com/edd-sl-api",
+                            "protocol": "https",
+                            "host": ["staging", "givewp", "com"],
+                            "path": ["edd-sl-api"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get single License information",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "edd_action",
+                                    "value": "check_license",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "license",
+                                    "value": "",
+                                    "description": "License Key",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "Item_name",
+                                    "value": "",
+                                    "description": "Add-on name. Optional",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "https://staging.givewp.com/edd-sl-api",
+                            "protocol": "https",
+                            "host": ["staging", "givewp", "com"],
+                            "path": ["edd-sl-api"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Multiple License information",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "edd_action",
+                                    "value": "check_licenses",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "licenses",
+                                    "value": "",
+                                    "description": "License Keys (seperated by comma)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "unlicensed",
+                                    "value": "",
+                                    "description": "Add-on names (seperated by comma). Optional",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "https://staging.givewp.com/edd-sl-api",
+                            "protocol": "https",
+                            "host": ["staging", "givewp", "com"],
+                            "path": ["edd-sl-api"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Activate License",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "edd_action",
+                                    "value": "activate_license",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "license",
+                                    "value": "",
+                                    "description": "License Key",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "item_name",
+                                    "value": "",
+                                    "description": "Add-on name",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "url",
+                                    "value": "",
+                                    "description": "Website Address",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "https://staging.givewp.com/edd-sl-api",
+                            "protocol": "https",
+                            "host": ["staging", "givewp", "com"],
+                            "path": ["edd-sl-api"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Deactivate License",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "edd_action",
+                                    "value": "deactivate_license",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "license",
+                                    "value": "",
+                                    "description": "License Key",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "item_name",
+                                    "value": "",
+                                    "description": "Add-on name",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "url",
+                                    "value": "",
+                                    "description": "Website Address",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "https://staging.givewp.com/edd-sl-api",
+                            "protocol": "https",
+                            "host": ["staging", "givewp", "com"],
+                            "path": ["edd-sl-api"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Subscription Information",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "edd_action",
+                                    "value": "check_subscription",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "license",
+                                    "value": "",
+                                    "description": "License Key",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "https://staging.givewp.com/edd-sl-api",
+                            "protocol": "https",
+                            "host": ["staging", "givewp", "com"],
+                            "path": ["edd-sl-api"]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        },
+        {
+            "name": "Live",
+            "item": [
+                {
+                    "name": "Get Subscription Information",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "edd_action",
+                                    "value": "check_subscription",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "license",
+                                    "value": "",
+                                    "description": "License Key",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "https://givewp.com/edd-sl-api",
+                            "protocol": "https",
+                            "host": ["givewp", "com"],
+                            "path": ["edd-sl-api"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Deactivate License",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "edd_action",
+                                    "value": "deactivate_license",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "license",
+                                    "value": "",
+                                    "description": "License Key",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "item_name",
+                                    "value": "",
+                                    "description": "Add-on name",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "url",
+                                    "value": "",
+                                    "description": "Website Address",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "https://givewp.com/edd-sl-api",
+                            "protocol": "https",
+                            "host": ["givewp", "com"],
+                            "path": ["edd-sl-api"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Activate License",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "edd_action",
+                                    "value": "activate_license",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "license",
+                                    "value": "",
+                                    "description": "License Key",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "item_name",
+                                    "value": "",
+                                    "description": "Add-on name",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "url",
+                                    "value": "",
+                                    "description": "Website Address",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "https://givewp.com/edd-sl-api",
+                            "protocol": "https",
+                            "host": ["givewp", "com"],
+                            "path": ["edd-sl-api"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Multiple License information",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "edd_action",
+                                    "value": "check_licenses",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "licenses",
+                                    "value": "",
+                                    "description": "License Keys (seperated by comma)",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "unlicensed",
+                                    "value": "",
+                                    "description": "Add-on names (seperated by comma). Optional",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "https://givewp.com/edd-sl-api",
+                            "protocol": "https",
+                            "host": ["givewp", "com"],
+                            "path": ["edd-sl-api"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get single License information",
+                    "request": {
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "edd_action",
+                                    "value": "check_license",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "license",
+                                    "value": "",
+                                    "description": "License Key",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "Item_name",
+                                    "value": "",
+                                    "description": "Add-on name. Optional",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "https://givewp.com/edd-sl-api",
+                            "protocol": "https",
+                            "host": ["givewp", "com"],
+                            "path": ["edd-sl-api"]
+                        }
+                    },
+                    "response": []
+                },
+                {
+                    "name": "Get Addon Information",
+                    "request": {
+                        "auth": {
+                            "type": "noauth"
+                        },
+                        "method": "POST",
+                        "header": [],
+                        "body": {
+                            "mode": "formdata",
+                            "formdata": [
+                                {
+                                    "key": "edd_action",
+                                    "value": "get_version",
+                                    "type": "text"
+                                },
+                                {
+                                    "key": "item_name",
+                                    "value": "recurring donations",
+                                    "type": "text"
+                                }
+                            ]
+                        },
+                        "url": {
+                            "raw": "https://givewp.com/edd-sl-api",
+                            "protocol": "https",
+                            "host": ["givewp", "com"],
+                            "path": ["edd-sl-api"]
+                        }
+                    },
+                    "response": []
+                }
+            ]
+        }
+    ]
+}
