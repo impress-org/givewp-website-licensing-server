@@ -94,3 +94,8 @@ TELESCOPE_ENABLED=false
 
 1. SSH login to `https://lumen.test`
 2. run `vendor/bin/phpunit` in `~/app` project root folder
+
+### Testing Routes
+1. Import postman collection from `.postman`
+2. Open any route of `GiveWP staging/live` or `GiveWP Licensing staging/live` to test. Just keep in mind
+that you have to fill request data to get response.
