@@ -12,7 +12,7 @@
 .git
 .gitignore
 /.circleci
-/README.md
+/readme.md
 /.editorconfig
 
 # Laravel & Test files
@@ -20,6 +20,7 @@
 /tests
 /.env
 /.env.testing
+/phpunit.xml
 
 # Composer files
 /vendor
