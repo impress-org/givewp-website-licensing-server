@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
 use Laravel\Lumen\Routing\Router;
 
@@ -16,15 +17,21 @@ $router->get('/', function () use ($router) {
 |--------------------------------------------------------------------------
 |
 */
+$router->post('test-redis', function () {
+    Cache::increment('testCounter');
+
+    return response(Cache::get('testCounter'));
+});
+
 $router->post('edd-sl-api', 'LicenseController@handle');
 
-$router->post('auth/login', array('uses' => 'AuthController@authenticate'));
+$router->post('auth/login', ['uses' => 'AuthController@authenticate']);
 
 $router->group(
-    array(
+    [
         'middleware' => 'jwt.auth',
         'prefix'     => 'update',
-    ),
+    ],
     function () use ($router) {
         $router->post('license', 'UpdateDataController@handle');
         $router->post('subscription', 'UpdateDataController@handle');
