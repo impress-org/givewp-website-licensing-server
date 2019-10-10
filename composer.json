@@ -32,13 +32,15 @@
         },
         "files": [
             "app/Helpers/Helpers.php",
-            "tests/Helpers.php"
         ]
     },
     "autoload-dev": {
         "psr-4": {
             "Tests\\": "tests/"
-        }
+        },
+        "files": [
+            "tests/Helpers.php"
+        ]
     },
     "scripts": {
         "post-root-package-install": [
