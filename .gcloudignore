@@ -17,7 +17,6 @@
 
 # Laravel & Test files
 /storage
-/tests
 /.env
 /.env.testing
 /phpunit.xml
