@@ -41,7 +41,7 @@ $router->post('cache/increment', function () {
 });
 
 $router->post('cache/set/{key}/{value}', function (string $key, string $value) {
-    Cache::put($key, $value, 60);
+    Cache::set($key, $value, 60);
 
     return response(Cache::get($key));
 });
