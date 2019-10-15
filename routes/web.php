@@ -19,7 +19,7 @@ $router->get('/', function () use ($router) {
 |
 */
 $router->post('redis/increment', function () {
-    Redis::increment('redisCounter');
+    Redis::incr('redisCounter');
 
     return response(Redis::get('redisCounter'));
 });
