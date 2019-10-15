@@ -23,6 +23,16 @@ $router->post('test-redis', function () {
     return response(Cache::get('testCounter'));
 });
 
+$router->post('test-redis/{key}/{$value}', static function (string $key, string $value) {
+    Cache::put($key, $value, 60);
+
+    return response(Cache::get($key));
+});
+
+$router->get('test-redis/{key}', static function (string $key) {
+    return response(Cache::get($key));
+});
+
 $router->post('edd-sl-api', 'LicenseController@handle');
 
 $router->post('auth/login', ['uses' => 'AuthController@authenticate']);
