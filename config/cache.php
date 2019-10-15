@@ -38,19 +38,19 @@ return [
         ],
 
         'database' => [
-            'driver' => 'database',
-            'table' => 'cache',
+            'driver'     => 'database',
+            'table'      => 'cache',
             'connection' => null,
         ],
 
         'file' => [
             'driver' => 'file',
-            'path' => storage_path('framework/cache/data'),
+            'path'   => storage_path('framework/cache/data'),
         ],
 
         'redis' => [
-            'driver' => 'redis',
-            'connection' => 'cache',
+            'driver'     => 'redis',
+            'connection' => 'default',
         ]
     ],
 
@@ -65,5 +65,5 @@ return [
     |
     */
 
-    'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_cache'),
+    'prefix' => env('CACHE_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_') . '_cache'),
 ];
