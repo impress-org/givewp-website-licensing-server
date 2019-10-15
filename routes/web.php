@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Redis;
 use Laravel\Lumen\Routing\Router;
 
 /* @var Router $router */
@@ -18,18 +19,34 @@ $router->get('/', function () use ($router) {
 |
 */
 $router->post('redis/increment', function () {
-    Cache::increment('testCounter');
+    Redis::increment('redisCounter');
 
-    return response(Cache::get('testCounter'));
+    return response(Redis::get('redisCounter'));
 });
 
 $router->post('redis/set/{key}/{value}', function (string $key, string $value) {
+    Redis::set($key, $value);
+
+    return response(Redis::get($key));
+});
+
+$router->get('redis/get/{key}', function (string $key) {
+    return response(Redis::get($key));
+});
+
+$router->post('cache/increment', function () {
+    Cache::increment('cacheCounter');
+
+    return response(Cache::get('cacheCounter'));
+});
+
+$router->post('cache/set/{key}/{value}', function (string $key, string $value) {
     Cache::put($key, $value, 60);
 
     return response(Cache::get($key));
 });
 
-$router->get('redis/get/{key}', function (string $key) {
+$router->get('cache/get/{key}', function (string $key) {
     return response(Cache::get($key));
 });
 
