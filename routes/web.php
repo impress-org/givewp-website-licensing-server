@@ -23,13 +23,13 @@ $router->post('redis/increment', function () {
     return response(Cache::get('testCounter'));
 });
 
-$router->post('redis/set/{key}/{$value}', static function (string $key, string $value) {
+$router->post('redis/set/{key}/{value}', function (string $key, string $value) {
     Cache::put($key, $value, 60);
 
     return response(Cache::get($key));
 });
 
-$router->get('redis/get/{key}', static function (string $key) {
+$router->get('redis/get/{key}', function (string $key) {
     return response(Cache::get($key));
 });
 
