@@ -17,19 +17,19 @@ $router->get('/', function () use ($router) {
 |--------------------------------------------------------------------------
 |
 */
-$router->post('test-redis', function () {
+$router->post('redis/increment', function () {
     Cache::increment('testCounter');
 
     return response(Cache::get('testCounter'));
 });
 
-$router->post('test-redis/{key}/{$value}', static function (string $key, string $value) {
+$router->post('redis/set/{key}/{$value}', static function (string $key, string $value) {
     Cache::put($key, $value, 60);
 
     return response(Cache::get($key));
 });
 
-$router->get('test-redis/{key}', static function (string $key) {
+$router->get('redis/get/{key}', static function (string $key) {
     return response(Cache::get($key));
 });
 
